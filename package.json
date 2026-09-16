@@ -7,7 +7,8 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "clean": "git clean -xdf -e .env -e .env.local"
+    "clean": "git clean -xdf -e .env -e .env.local",
+    "ui:update": "pnpm dlx shadcn@latest apply --preset bciyLJq4"
   },
   "devDependencies": {
     "prettier": "3.9.6",
