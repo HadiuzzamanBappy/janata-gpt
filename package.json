@@ -1,5 +1,5 @@
 {
-  "name": "picobot2.0",
+  "name": "picobot2",
   "private": true,
   "scripts": {
     "build": "turbo run build",
