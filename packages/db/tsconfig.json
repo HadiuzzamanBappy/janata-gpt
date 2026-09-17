@@ -5,6 +5,7 @@
   },
   "include": [
     "src/**/*",
-    "eslint.config.mjs"
+    "eslint.config.mjs",
+    "drizzle.config.ts"
   ]
 }
