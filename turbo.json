@@ -1,6 +1,24 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
   "ui": "tui",
+  "globalEnv": [
+    "DATABASE_URL",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_JWT_SECRET",
+    "GEMINI_API_KEY",
+    "ZAI_API_KEY",
+    "OPENROUTER_API_KEY",
+    "DEEPSEEK_API_KEY",
+    "FIRECRAWL_API_KEY",
+    "RESEND_API_KEY",
+    "UPSTASH_REDIS_REST_URL",
+    "UPSTASH_REDIS_REST_TOKEN",
+    "LEMONSQUEEZY_TEST_API_KEY",
+    "LEMONSQUEEZY_LIVE_API_KEY",
+    "LEMONSQUEEZY_WEBHOOK_SECRET",
+    "LEMONSQUEEZY_STORE_ID",
+    "LEMONSQUEEZY_MODE"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

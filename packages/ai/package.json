@@ -13,7 +13,17 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@types/node": "^26.6.1",
     "eslint": "10.9.1",
     "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^4.0.56",
+    "@ai-sdk/google": "^4.0.74",
+    "@ai-sdk/mistral": "^4.0.46",
+    "@ai-sdk/openai": "^4.0.69",
+    "@upstash/redis": "^1.38.4",
+    "ai": "^7.0.105",
+    "zod": "^4.6.5"
   }
 }
