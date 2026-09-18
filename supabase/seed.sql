@@ -11,7 +11,7 @@ INSERT INTO auth.users (
   'authenticated',
   'authenticated',
   'demo@janatagpt.com',
-  crypt('password123', gen_salt('bf')),
+  extensions.crypt('password123', extensions.gen_salt('bf')),
   '{"full_name": "Demo User", "avatar_url": "https://api.dicebear.com/7.x/avataaars/svg?seed=Demo"}',
   now(),
   now()
