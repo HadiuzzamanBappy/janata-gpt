@@ -27,7 +27,7 @@ import {
 const authMenu = [
   { title: "New chat", url: "/", icon: SquarePen },
   { title: "Search chats", url: "#", icon: Search },
-  { title: "Images", url: "#", icon: ImageIcon },
+  { title: "Images", url: "/images", icon: ImageIcon },
   { title: "Library", url: "#", icon: Library },
   { title: "Scheduled", url: "/scheduled", icon: Clock },
   { title: "Plugins", url: "/plugins", icon: Blocks },
