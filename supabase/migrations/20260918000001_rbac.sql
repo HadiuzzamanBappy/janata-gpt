@@ -8,6 +8,7 @@ CREATE TABLE public.users (
   avatar_url text,
   locale text,
   timezone text,
+  preferences_json jsonb DEFAULT '{}'::jsonb,
   status text DEFAULT 'active',
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
