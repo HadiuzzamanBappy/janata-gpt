@@ -44,23 +44,23 @@ export function PricingTable() {
               <p className="text-sm font-medium text-card-foreground mb-2">Start with the basics:</p>
               <ul className="space-y-3 text-sm text-muted-foreground">
                 <li className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-zinc-400 shrink-0" />
+                  <Check className="w-5 h-5 text-muted-foreground shrink-0" />
                   <span>Unlimited everyday text chats</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <ImageIcon className="w-5 h-5 text-zinc-400 shrink-0" />
+                  <ImageIcon className="w-5 h-5 text-muted-foreground shrink-0" />
                   <span>Limited access to image creation</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Database className="w-5 h-5 text-zinc-400 shrink-0" />
+                  <Database className="w-5 h-5 text-muted-foreground shrink-0" />
                   <span>Limited memory and storage</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Mic className="w-5 h-5 text-zinc-400 shrink-0" />
+                  <Mic className="w-5 h-5 text-muted-foreground shrink-0" />
                   <span>Limited voice chats</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="w-5 h-5 flex items-center justify-center shrink-0 border border-zinc-400 rounded-sm text-[10px]">Ad</span>
+                  <span className="w-5 h-5 flex items-center justify-center shrink-0 border border-muted-foreground rounded-sm text-[10px]">Ad</span>
                   <span>Ad supported</span>
                 </li>
               </ul>
@@ -89,23 +89,23 @@ export function PricingTable() {
               <p className="text-sm font-medium text-card-foreground mb-2">Everything in Free, and:</p>
               <ul className="space-y-3 text-sm text-muted-foreground">
                 <li className="flex items-start gap-3">
-                  <Sparkles className="w-5 h-5 text-zinc-400 shrink-0" />
+                  <Sparkles className="w-5 h-5 text-muted-foreground shrink-0" />
                   <span>More messages with tools</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <ImageIcon className="w-5 h-5 text-zinc-400 shrink-0" />
+                  <ImageIcon className="w-5 h-5 text-muted-foreground shrink-0" />
                   <span>More image creation</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Database className="w-5 h-5 text-zinc-400 shrink-0" />
+                  <Database className="w-5 h-5 text-muted-foreground shrink-0" />
                   <span>More memory and storage</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Mic className="w-5 h-5 text-zinc-400 shrink-0" />
+                  <Mic className="w-5 h-5 text-muted-foreground shrink-0" />
                   <span>More voice chats</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="w-5 h-5 flex items-center justify-center shrink-0 border border-zinc-400 rounded-sm text-[10px]">Ad</span>
+                  <span className="w-5 h-5 flex items-center justify-center shrink-0 border border-muted-foreground rounded-sm text-[10px]">Ad</span>
                   <span>Ad supported</span>
                 </li>
               </ul>
@@ -202,27 +202,27 @@ export function PricingTable() {
               <p className="text-sm font-medium text-card-foreground mb-2">Everything in Plus, and:</p>
               <ul className="space-y-3 text-sm text-muted-foreground">
                 <li className="flex items-start gap-3">
-                  <Sparkles className="w-5 h-5 text-zinc-400 shrink-0" />
+                  <Sparkles className="w-5 h-5 text-muted-foreground shrink-0" />
                   <span>Our most capable frontier Pro model</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Sparkles className="w-5 h-5 text-zinc-400 shrink-0" />
+                  <Sparkles className="w-5 h-5 text-muted-foreground shrink-0" />
                   <span>Faster, more powerful Work and Codex</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Database className="w-5 h-5 text-zinc-400 shrink-0" />
+                  <Database className="w-5 h-5 text-muted-foreground shrink-0" />
                   <span>Maximum memory and 100 GB of storage</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Sparkles className="w-5 h-5 text-zinc-400 shrink-0" />
+                  <Sparkles className="w-5 h-5 text-muted-foreground shrink-0" />
                   <span>5x Plus usage for longer work sessions</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Sparkles className="w-5 h-5 text-zinc-400 shrink-0" />
+                  <Sparkles className="w-5 h-5 text-muted-foreground shrink-0" />
                   <span>Early access to new tools and models</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-zinc-400 shrink-0" />
+                  <Check className="w-5 h-5 text-muted-foreground shrink-0" />
                   <span>No ads</span>
                 </li>
               </ul>

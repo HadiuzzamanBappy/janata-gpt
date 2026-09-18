@@ -82,7 +82,7 @@ export function AppChatInput({ onSend }: { onSend?: (text: string) => void }) {
               <Plus className="w-5 h-5" />
             </DropdownMenuTrigger>
           </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="bg-popover text-foreground font-semibold px-3 py-2 border-border shadow-md rounded-xl">
+          <TooltipContent side="bottom" sideOffset={8}>
             <p>Attach</p>
           </TooltipContent>
         </Tooltip>
@@ -132,7 +132,7 @@ export function AppChatInput({ onSend }: { onSend?: (text: string) => void }) {
         )}>
           <ArrowUp className="w-4 h-4" />
         </TooltipTrigger>
-        <TooltipContent side="bottom" sideOffset={8} className="bg-popover text-foreground font-semibold px-3 py-2 border-border shadow-md rounded-xl">
+        <TooltipContent side="bottom" sideOffset={8}>
           <p>Send message</p>
         </TooltipContent>
       </Tooltip>

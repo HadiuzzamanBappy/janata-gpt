@@ -64,7 +64,7 @@ export function UserMenu({ user }: UserMenuProps) {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem 
-          className="cursor-pointer gap-2 rounded-lg px-2 py-1.5 text-red-500 focus:text-red-600 focus:bg-red-500/10 dark:text-red-400 dark:focus:text-red-300 dark:focus:bg-red-400/10" 
+          className="cursor-pointer gap-2 rounded-lg px-2 py-1.5 text-destructive focus:text-destructive focus:bg-destructive/10" 
           onClick={handleSignOut}
         >
           <LogOut className="w-4 h-4" />

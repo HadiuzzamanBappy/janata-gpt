@@ -14,7 +14,6 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarTrigger,
-  SidebarSeparator,
   Avatar,
   AvatarFallback,
   AvatarImage
@@ -81,7 +80,6 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarSeparator className="mb-2 group-data-[collapsible=icon]:hidden" />
       <SidebarContent>
         <MainMenu
           isAuth={isAuth}

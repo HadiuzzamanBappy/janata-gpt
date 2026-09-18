@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuGroup,
+  Button,
 } from "@repo/ui";
 import {
   Filter,
@@ -140,20 +141,20 @@ export default function ScheduledPage() {
         />
         
         <div className="flex items-center gap-1.5 shrink-0">
-          <button className="p-2 rounded-full hover:bg-muted/80 text-foreground transition-colors" title="Voice input">
+          <Button variant="ghost" size="icon" className="rounded-full text-foreground hover:bg-muted/80 h-9 w-9" title="Voice input">
             <Mic className="size-5" />
-          </button>
-          <button className="flex items-center justify-center size-9 bg-muted/60 text-muted-foreground rounded-full hover:bg-muted transition-colors mr-0.5" title="Submit">
+          </Button>
+          <Button variant="secondary" size="icon" className="rounded-full size-9 text-muted-foreground hover:text-foreground mr-0.5" title="Submit">
             <ArrowUp className="size-5" />
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Recommended Section */}
       <div className="w-full">
-        <button className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors mb-2 outline-none rounded-md focus-visible:ring-2 focus-visible:ring-primary/50">
+        <Button variant="ghost" className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground mb-2 h-auto py-1 px-2 -ml-2">
           Recommended <ChevronDown className="size-4" />
-        </button>
+        </Button>
         
         <div className="flex flex-col">
           {RECOMMENDED_TASKS.map((task, idx) => (
@@ -167,9 +168,9 @@ export default function ScheduledPage() {
                   <span className="text-muted-foreground text-sm">{task.description}</span>
                 </div>
               </div>
-              <button className="text-muted-foreground hover:text-foreground p-2 rounded-full hover:bg-muted transition-colors sm:opacity-0 group-hover:opacity-100 outline-none">
+              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground rounded-full sm:opacity-0 group-hover:opacity-100 h-9 w-9">
                 <Plus className="size-5" />
-              </button>
+              </Button>
             </div>
           ))}
         </div>

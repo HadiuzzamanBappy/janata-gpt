@@ -28,7 +28,7 @@ const authMenu = [
   { title: "New chat", url: "/", icon: SquarePen },
   { title: "Search chats", url: "#", icon: Search },
   { title: "Images", url: "/images", icon: ImageIcon },
-  { title: "Library", url: "#", icon: Library },
+  { title: "Library", url: "/library", icon: Library },
   { title: "Scheduled", url: "/scheduled", icon: Clock },
   { title: "Plugins", url: "/plugins", icon: Blocks },
   { title: "Projects", url: "/projects", icon: FolderGit2 },

@@ -79,7 +79,7 @@ export function AppTopbar({ user }: { user?: User | null }) {
       <div className="flex items-center gap-1.5 mr-2">
         {user ? (
           <>
-            <Button variant="ghost" className="rounded-full font-semibold px-4 h-9 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-400/10">
+            <Button variant="secondary" className="rounded-full font-semibold px-4 h-9">
               <Sparkles className="size-4 mr-2" />
               Upgrade plan
             </Button>
