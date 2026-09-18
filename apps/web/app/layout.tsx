@@ -26,9 +26,9 @@ export default function RootLayout({
           <TooltipProvider delay={0}>
             <SidebarProvider>
               <AppSidebar />
-              <SidebarInset>
+              <SidebarInset className="flex flex-col overflow-hidden">
                 <AppTopbar />
-                <div className="flex flex-1 flex-col overflow-hidden relative">
+                <div className="flex flex-1 flex-col overflow-auto relative min-h-0">
                   {children}
                 </div>
               </SidebarInset>

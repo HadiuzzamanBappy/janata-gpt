@@ -7,6 +7,7 @@ export * from "./providers/theme-provider"
 
 // Component exports
 export * from "./components/brand-logo"
+export * from "./components/theme-toggle"
 export * from "./components/ui/avatar"
 export * from "./components/ui/badge"
 export * from "./components/ui/breadcrumb"

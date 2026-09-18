@@ -15,10 +15,16 @@ import {
 } from "@repo/ui";
 import { Plus, ArrowUp, Paperclip, Globe, Image as ImageIcon, Telescope, FilePlus2 } from "lucide-react";
 
-export function AppChatInput() {
+export function AppChatInput({ onSend }: { onSend?: (text: string) => void }) {
   const [input, setInput] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  function handleSend() {
+    if (!input.trim()) return;
+    onSend?.(input.trim());
+    setInput("");
+  }
 
   // Auto-resize and expansion logic
   useEffect(() => {
@@ -116,7 +122,9 @@ export function AppChatInput() {
   const SendButton = (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger className={cn(
+        <TooltipTrigger
+          onClick={handleSend}
+          className={cn(
           "flex items-center justify-center w-8 h-8 rounded-full transition-colors cursor-pointer",
           input.trim().length > 0 
             ? "bg-primary text-primary-foreground hover:bg-primary/90" 
@@ -141,6 +149,12 @@ export function AppChatInput() {
         ref={textareaRef}
         value={input}
         onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSend();
+            }
+          }}
         placeholder="Ask Janata GPT"
         rows={1}
         className={cn(

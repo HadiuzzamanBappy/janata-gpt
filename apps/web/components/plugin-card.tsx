@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Plugin } from "@/lib/plugins";
-import { cn } from "@repo/ui";
+import { cn } from "@repo/ui/lib/utils";
 
 interface PluginCardProps {
   plugin: Plugin;

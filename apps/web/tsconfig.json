@@ -24,6 +24,9 @@
       "@/lib/plugins": [
         "./lib/plugins"
       ],
+      "@/lib/chats": [
+        "./lib/chats"
+      ],
       "@/lib/*": [
         "../../packages/ui/src/lib/*"
       ]
