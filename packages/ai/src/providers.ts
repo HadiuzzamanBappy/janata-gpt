@@ -1,7 +1,9 @@
 import { createOpenAI, openai } from '@ai-sdk/openai';
-import { google } from '@ai-sdk/google';
-import { anthropic } from '@ai-sdk/anthropic';
-import { mistral } from '@ai-sdk/mistral';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
+
+export const google = createGoogleGenerativeAI({
+  apiKey: process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY || '',
+});
 
 // Create a custom OpenAI instance pointing to OpenRouter
 export const openRouter = createOpenAI({
@@ -24,9 +26,7 @@ export const zai = createOpenAI({
 // Unified providers object
 export const providers = {
   openai,
-  anthropic,
   gemini: google,
-  mistral,
   deepseek: deepSeek,
   zai,
   openrouter: openRouter,

@@ -27,27 +27,32 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { demoChats } from "@/lib/chats";
 
-export function ChatList({ isAuth }: { isAuth?: boolean }) {
+export function ChatList({ 
+  isAuth, 
+  sessions = [] 
+}: { 
+  isAuth?: boolean; 
+  sessions?: { id: string; title: string | null }[] 
+}) {
   const [isExpanded, setIsExpanded] = useState(true);
   const pathname = usePathname();
 
   if (!isAuth) return null;
 
-  const renderChatItems = (chats: typeof demoChats) => (
+  const renderChatItems = (chats: { id: string; title: string | null }[]) => (
     <SidebarMenu>
       {chats.map((chat) => {
         const isActive = pathname === `/chat/${chat.id}`;
         return (
           <SidebarMenuItem key={chat.id}>
             <SidebarMenuButton
-              tooltip={chat.title}
+              tooltip={chat.title || "New Chat"}
               isActive={isActive}
               className="h-9 pr-14"
               render={<Link href={`/chat/${chat.id}`} />}
             >
-              <span className="truncate">{chat.title}</span>
+              <span className="truncate">{chat.title || "New Chat"}</span>
             </SidebarMenuButton>
 
             {/* Gradient fade + action buttons */}
@@ -115,7 +120,7 @@ export function ChatList({ isAuth }: { isAuth?: boolean }) {
                 <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground mb-1">
                   Recents
                 </div>
-                {renderChatItems(demoChats.slice(0, 5))}
+                {renderChatItems(sessions.slice(0, 5))}
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
@@ -165,7 +170,7 @@ export function ChatList({ isAuth }: { isAuth?: boolean }) {
           </div>
 
           {/* Chat Items */}
-          {isExpanded && renderChatItems(demoChats)}
+          {isExpanded && renderChatItems(sessions)}
         </div>
       </SidebarGroup>
     </>

@@ -1,15 +1,14 @@
-import { generateText, LanguageModel } from 'ai';
-import { getModel } from './client.js';
-import { defaultModels } from './registry.js';
+import { generateText, type LanguageModel } from 'ai';
+import { getModel } from './client';
+import { defaultModels } from './registry';
 
 /**
  * Universal Vision / Multimodal Helper
- * Allows the AI to read, analyze, and extract information from images.
  */
 export async function analyzeImage(
   instruction: string,
   imageUrl: URL | string | Uint8Array | Buffer,
-  model: LanguageModel = getModel(defaultModels.claude) // Claude 3.5 Sonnet has state-of-the-art vision
+  model: LanguageModel = getModel(defaultModels.deepseekChat)
 ): Promise<string> {
   
   // Format the image url correctly if it's a string

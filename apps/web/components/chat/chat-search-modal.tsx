@@ -2,19 +2,19 @@
 
 import { Dialog, DialogContent, DialogTitle } from "@repo/ui";
 import { Search, MessageSquare } from "lucide-react";
-import { demoChats } from "@/lib/chats";
 import { useState } from "react";
 
 interface ChatSearchModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  sessions?: { id: string; title: string | null }[];
 }
 
-export function ChatSearchModal({ open, onOpenChange }: ChatSearchModalProps) {
+export function ChatSearchModal({ open, onOpenChange, sessions = [] }: ChatSearchModalProps) {
   const [query, setQuery] = useState("");
 
-  const filteredChats = demoChats.filter((chat) =>
-    chat.title.toLowerCase().includes(query.toLowerCase())
+  const filteredChats = sessions.filter((chat) =>
+    chat.title?.toLowerCase().includes(query.toLowerCase())
   );
 
   return (

@@ -1,16 +1,15 @@
-import { generateText, LanguageModel } from 'ai';
-import { getModel } from './client.js';
-import { defaultModels } from './registry.js';
-import { aiTools } from './tools.js';
+import { generateText, type LanguageModel } from 'ai';
+import { getModel } from './client';
+import { defaultModels } from './registry';
+import { aiTools } from './tools';
 
 /**
  * Universal Multi-Step Agent Boilerplate
  * This loop allows the AI to use tools multiple times in a row before returning a final answer.
- * Perfect for complex reasoning tasks or autonomous data gathering.
  */
 export async function runAgentLoop(
   prompt: string,
-  model: LanguageModel = getModel(defaultModels.claude)
+  model: LanguageModel = getModel(defaultModels.deepseekChat)
 ): Promise<string> {
   const result = await generateText({
     model,

@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2022",
+    "lib": ["es2022"],
+    "types": ["node"],
+    "noEmit": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "baseUrl": ".",
+    "paths": {
+      "@repo/ai": ["../packages/ai/src/index.ts"],
+      "ai": ["../node_modules/ai"]
+    }
+  },
+  "include": [
+    "**/*"
+  ]
+}

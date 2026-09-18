@@ -30,9 +30,10 @@ import { User } from "@supabase/supabase-js"
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   user?: User | null;
+  chatSessions?: { id: string; title: string | null }[];
 }
 
-export function AppSidebar({ user, ...props }: AppSidebarProps) {
+export function AppSidebar({ user, chatSessions = [], ...props }: AppSidebarProps) {
   const [isLoginModalOpen, setIsLoginModalOpen] = React.useState(false);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
@@ -86,7 +87,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
           onLoginClick={() => setIsLoginModalOpen(true)}
           onSearchClick={() => setIsSearchOpen(true)}
         />
-        <ChatList isAuth={isAuth} />
+        <ChatList isAuth={isAuth} sessions={chatSessions} />
       </SidebarContent>
       {isAuth && (
         <>
@@ -159,6 +160,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
       <ChatSearchModal
         open={isSearchOpen}
         onOpenChange={setIsSearchOpen}
+        sessions={chatSessions}
       />
       <SettingsModal
         open={isSettingsOpen}

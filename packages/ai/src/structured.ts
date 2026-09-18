@@ -1,15 +1,16 @@
-import { generateObject, streamObject, LanguageModel } from 'ai';
+import { generateObject, streamObject, type LanguageModel } from 'ai';
 import { z } from 'zod';
-import { getModel } from './client.js';
+import { getModel } from './client';
+import { defaultModels } from './registry';
 
 /**
  * Universal Structured Data Extractor
- * Forces the AI to output exactly the JSON structure you define.
+ * Forces the AI to output exactly the JSON structure you define using DeepSeek by default.
  */
 export async function extractStructuredData<T>(
   prompt: string,
   schema: z.ZodSchema<T>,
-  model: LanguageModel = getModel({ provider: 'anthropic', model: 'claude-3-5-sonnet-latest' })
+  model: LanguageModel = getModel(defaultModels.deepseekChat)
 ): Promise<T> {
   const { object } = await generateObject({
     model,
@@ -26,7 +27,7 @@ export async function extractStructuredData<T>(
 export async function streamStructuredData<T>(
   prompt: string,
   schema: z.ZodSchema<T>,
-  model: LanguageModel = getModel({ provider: 'gemini', model: 'gemini-1.5-flash' })
+  model: LanguageModel = getModel(defaultModels.deepseekChat)
 ) {
   const { partialObjectStream } = await streamObject({
     model,

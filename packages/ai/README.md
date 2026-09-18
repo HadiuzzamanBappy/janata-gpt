@@ -58,7 +58,25 @@ export async function askQuestion(prompt: string) {
 }
 ```
 
-### 2. Caching (Save API Costs)
+### 2. Next.js API Streaming (The Chat Endpoint)
+Plugging `@repo/ai` into your Next.js `/api/chat/route.ts` is exactly 1 line of code thanks to the built-in `streamChatResponse` helper. It automatically intercepts tools, handles looping, and formats the stream.
+
+```typescript
+// apps/web/app/api/chat/route.ts
+import { streamChatResponse } from '@repo/ai';
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+  
+  return streamChatResponse(
+    messages,
+    "You are a helpful assistant.", // System prompt
+    // getModel(defaultModels.claude) // Optional: override model
+  );
+}
+```
+
+### 3. Caching (Save API Costs)
 Before doing a heavy AI generation, check if the exact same question was asked recently.
 
 ```typescript
