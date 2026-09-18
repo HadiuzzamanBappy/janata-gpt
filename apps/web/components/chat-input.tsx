@@ -15,7 +15,15 @@ import {
 } from "@repo/ui";
 import { Plus, ArrowUp, Paperclip, Globe, Image as ImageIcon, Telescope, FilePlus2 } from "lucide-react";
 
-export function AppChatInput({ onSend }: { onSend?: (text: string) => void }) {
+export function AppChatInput({ 
+  onSend, 
+  placeholder = "Ask Janata GPT",
+  customAttachmentButton
+}: { 
+  onSend?: (text: string) => void,
+  placeholder?: string,
+  customAttachmentButton?: React.ReactNode
+}) {
   const [input, setInput] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -155,7 +163,7 @@ export function AppChatInput({ onSend }: { onSend?: (text: string) => void }) {
               handleSend();
             }
           }}
-        placeholder="Ask Janata GPT"
+        placeholder={placeholder}
         rows={1}
         className={cn(
           "w-full bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground text-base resize-none overflow-hidden transition-all duration-300 ease-in-out block",
@@ -167,7 +175,7 @@ export function AppChatInput({ onSend }: { onSend?: (text: string) => void }) {
       />
       
       <div className="absolute left-[6px] bottom-[6px] z-10 flex items-center justify-center">
-        {AttachmentButton}
+        {customAttachmentButton || AttachmentButton}
       </div>
       
       <div className="absolute right-[6px] bottom-[6px] z-10 flex items-center justify-center">

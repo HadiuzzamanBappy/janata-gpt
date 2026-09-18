@@ -12,10 +12,10 @@ export default function ProjectsPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   return (
-    <div className="flex flex-col h-full w-full max-w-5xl mx-auto px-4 py-8 md:px-8">
+    <div className="flex flex-col h-full w-full max-w-5xl mx-auto px-4 py-6 md:px-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Projects</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">Projects</h1>
         <div className="flex items-center gap-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
@@ -34,13 +34,13 @@ export default function ProjectsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-1 mb-16">
+      <div className="flex items-center gap-1 mb-8">
         {TABS.map((tab) => (
           <Button
             key={tab}
             variant={activeTab === tab ? "secondary" : "ghost"}
             onClick={() => setActiveTab(tab)}
-            className="rounded-full px-4 font-medium"
+            className={`rounded-full px-4 h-9 font-medium text-sm ${activeTab === tab ? 'bg-muted hover:bg-muted/80' : 'text-muted-foreground'}`}
           >
             {tab}
           </Button>
@@ -48,11 +48,11 @@ export default function ProjectsPage() {
       </div>
 
       {/* Empty State */}
-      <div className="flex-1 flex flex-col items-center justify-center -mt-24">
-        <div className="w-16 h-16 bg-muted/60 rounded-3xl flex items-center justify-center mb-6 shadow-sm border border-border/40">
-          <Folder className="size-8 text-foreground/80" strokeWidth={1.5} />
+      <div className="flex-1 flex flex-col items-center justify-center -mt-16">
+        <div className="w-14 h-14 bg-muted/60 rounded-2xl flex items-center justify-center mb-4 shadow-sm border border-border/40">
+          <Folder className="size-7 text-foreground/80" strokeWidth={1.5} />
         </div>
-        <h2 className="text-xl font-semibold text-foreground tracking-tight">No projects yet</h2>
+        <h2 className="text-lg font-semibold text-foreground tracking-tight">No projects yet</h2>
       </div>
 
       <CreateProjectModal 

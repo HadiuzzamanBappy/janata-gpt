@@ -10,6 +10,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuLabel,
   Button,
+  Input,
   Table,
   TableHeader,
   TableRow,
@@ -107,34 +108,38 @@ export default function LibraryPage() {
 
           {/* View Toggles */}
           <div className="flex items-center gap-1">
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => setView("grid")}
-              className={`p-2 rounded-full transition-colors ${view === "grid" ? "text-foreground bg-muted/50" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}
+              className={`rounded-full h-9 w-9 ${view === "grid" ? "text-foreground bg-muted/50" : "text-muted-foreground hover:bg-muted"}`}
             >
               <LayoutGrid className="size-5" />
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => setView("list")}
-              className={`p-2 rounded-full transition-colors ${view === "list" ? "text-foreground bg-muted/50" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}
+              className={`rounded-full h-9 w-9 ${view === "list" ? "text-foreground bg-muted/50" : "text-muted-foreground hover:bg-muted"}`}
             >
               <List className="size-5" />
-            </button>
+            </Button>
           </div>
 
           {/* Search Input */}
           <div className="relative flex items-center ml-2">
             <Search className="absolute left-3 size-4 text-muted-foreground" />
-            <input
+            <Input
               placeholder="Search library"
-              className="pl-9 pr-4 h-10 w-64 bg-popover hover:bg-muted border border-transparent focus:border-border/50 focus:bg-background rounded-full text-sm text-foreground outline-none transition-all placeholder:text-muted-foreground"
+              className="pl-9 pr-4 h-9 w-64 bg-muted/40 border-border/50 rounded-full"
             />
           </div>
 
           {/* New Dropdown */}
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-1.5 px-4 h-10 rounded-full bg-white text-black font-semibold hover:bg-gray-100 transition-colors outline-none ml-2">
+            <DropdownMenuTrigger render={<Button className="rounded-full px-4 h-9 font-semibold ml-2 outline-none" />}>
               New
-              <ChevronDown className="size-4" />
+              <ChevronDown className="size-4 ml-1" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48 p-1.5 rounded-xl border-border/40 shadow-xl bg-popover">
               <DropdownMenuItem className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-muted">
@@ -177,7 +182,7 @@ export default function LibraryPage() {
                     <span className="font-medium text-sm">Show hidden files</span>
                   </div>
                   {/* Custom Toggle Switch */}
-                  <div className={`w-8 h-4 rounded-full flex items-center p-0.5 transition-colors ${showHidden ? 'bg-blue-500' : 'bg-muted-foreground/30'}`}>
+                  <div className={`w-8 h-4 rounded-full flex items-center p-0.5 transition-colors ${showHidden ? 'bg-primary' : 'bg-muted-foreground/30'}`}>
                     <div className={`w-3 h-3 bg-white rounded-full shadow-sm transition-transform ${showHidden ? 'translate-x-4' : 'translate-x-0'}`} />
                   </div>
                 </DropdownMenuItem>
