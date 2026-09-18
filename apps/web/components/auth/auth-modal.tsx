@@ -18,7 +18,7 @@ interface AuthModalProps {
 export function AuthModal({ open, onOpenChange, defaultMode = "login" }: AuthModalProps) {
   // We can pass defaultMode to AuthForm, or just let AuthForm handle toggling internally (Wait, AuthForm currently hardcodes mode via props, but we can pass defaultMode).
   // Currently AuthForm uses `Link` to toggle modes by navigating. 
-  // If we want it to work in a modal without navigating away, we might need AuthModal to manage the mode state, OR just pass `mode="login"` and let them navigate to `/auth/register`.
+  // If we want it to work in a modal without navigating away, we might need AuthModal to manage the mode state, OR just pass `mode="login"` and let them navigate to `/register`.
   // Actually, the user just said "make it as auth modal". Let's just rename it and keep the same prop signature for now.
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

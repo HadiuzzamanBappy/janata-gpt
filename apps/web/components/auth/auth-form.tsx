@@ -29,7 +29,7 @@ export function AuthForm({ mode }: AuthFormProps) {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
     
-    const redirectUrl = `${window.location.origin}/auth/callback`;
+    const redirectUrl = `${window.location.origin}/api/auth/callback`;
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -60,7 +60,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: `${window.location.origin}/api/auth/callback`,
           data: {
             full_name: name,
           }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { PageHeader } from "@/components/layout/page-header";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -56,12 +57,12 @@ export default function LibraryPage() {
   const [view, setView] = useState<"list" | "grid">("list");
 
   return (
-    <div className="flex flex-col h-full w-full px-4 py-6 md:px-8 max-w-5xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between w-full mb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Library</h1>
-
-        <div className="flex items-center gap-3">
+    <div className="flex flex-col h-full w-full overflow-y-auto bg-background">
+      <div className="flex flex-col w-full max-w-6xl mx-auto px-4 py-6 md:px-8">
+      <PageHeader
+        title="Library"
+        action={
+          <>
           {/* Filter Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors outline-none">
@@ -201,8 +202,9 @@ export default function LibraryPage() {
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
-      </div>
+          </>
+        }
+      />
 
       {/* Tabs */}
       <div className="flex items-center gap-1 mb-8">
@@ -264,6 +266,7 @@ export default function LibraryPage() {
             ))}
           </TableBody>
         </Table>
+      </div>
       </div>
     </div>
   );

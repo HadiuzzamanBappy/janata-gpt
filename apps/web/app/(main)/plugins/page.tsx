@@ -1,26 +1,16 @@
 import { categories, getPluginsByCategory } from "@/lib/plugins";
-import { PluginCard } from "@/components/plugin-card";
-import { Search } from "lucide-react";
+import { PluginCard } from "@/components/plugins/plugin-card";
+import { PageHeader } from "@/components/layout/page-header";
 
 export default function PluginsPage() {
   return (
     <div className="flex flex-col h-full w-full overflow-y-auto bg-background">
-      <div className="max-w-6xl w-full mx-auto flex flex-col gap-8 px-4 py-8 pb-12">
+      <div className="flex flex-col w-full max-w-6xl mx-auto px-4 py-6 md:px-8">
 
-        {/* Header & Search */}
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">Plugins</h1>
-          <p className="text-muted-foreground text-sm">Work with JanataGPT across your favorite tools.</p>
-
-          <div className="relative max-w-md mt-4">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Search plugins..."
-              className="w-full pl-9 pr-4 py-2 bg-muted/50 border border-border rounded-lg focus:outline-none focus:ring-1 focus:ring-ring transition-all text-sm"
-            />
-          </div>
-        </div>
+        <PageHeader 
+          title="Plugins"
+          searchPlaceholder="Search plugins..."
+        />
 
         {/* Categories & Plugins */}
         <div className="flex flex-col gap-10 mt-2">

@@ -3,6 +3,8 @@ import { getPluginById } from "@/lib/plugins";
 import { Button } from "@repo/ui";
 import { ArrowRight, Server, AppWindow, Sparkles, ExternalLink } from "lucide-react";
 
+import { PageHeader } from "@/components/layout/page-header";
+
 const connectionTypeConfig = {
   "App": { icon: AppWindow, color: "bg-blue-500/15 text-blue-400 border-blue-500/30" },
   "MCP Servers": { icon: Server, color: "bg-purple-500/15 text-purple-400 border-purple-500/30" },
@@ -26,6 +28,7 @@ export default async function PluginDetailsPage({ params }: { params: Promise<{ 
   return (
     <div className="flex flex-col h-full w-full overflow-y-auto bg-background p-6 lg:p-12 text-foreground">
       <div className="max-w-3xl w-full mx-auto flex flex-col gap-10">
+        <PageHeader showBackButton />
 
         {/* Header */}
         <div className="flex items-start justify-between gap-4">

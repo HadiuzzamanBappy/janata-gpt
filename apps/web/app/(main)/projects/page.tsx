@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Folder } from "lucide-react";
-import { Button, Input } from "@repo/ui";
-import { CreateProjectModal } from "@/components/create-project-modal";
+import { Folder } from "lucide-react";
+import { Button } from "@repo/ui";
+import { PageHeader } from "@/components/layout/page-header";
+import { CreateProjectModal } from "@/components/projects/create-project-modal";
 
 const TABS = ["All", "Created by you", "Shared with you"];
 
@@ -13,26 +14,19 @@ export default function ProjectsPage() {
 
   return (
     <div className="flex flex-col h-full w-full overflow-y-auto bg-background">
-      <div className="flex flex-col w-full max-w-6xl mx-auto px-4 py-6 md:px-8 min-h-full">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Projects</h1>
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-            <Input 
-              placeholder="Search projects" 
-              className="pl-9 w-full sm:w-64 bg-muted/40 border-border/50 rounded-full h-10"
-            />
-          </div>
+      <div className="flex flex-col flex-1 w-full max-w-6xl mx-auto px-4 py-6 md:px-8">
+      <PageHeader 
+        title="Projects"
+        searchPlaceholder="Search projects"
+        action={
           <Button 
             onClick={() => setIsCreateModalOpen(true)}
             className="rounded-full px-5 h-10 font-semibold bg-primary text-primary-foreground hover:bg-primary/90"
           >
             New
           </Button>
-        </div>
-      </div>
+        }
+      />
 
       {/* Tabs */}
       <div className="flex items-center gap-1 mb-8">

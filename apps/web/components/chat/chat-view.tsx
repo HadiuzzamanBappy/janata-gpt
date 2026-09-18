@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { AppChatInput } from "@/components/chat-input";
+import { AppChatInput } from "@/components/chat/chat-input";
 import { 
   Sparkles, 
   Copy,
@@ -44,7 +44,7 @@ const SUGGESTIONS = [
 ];
 
 /**
- * New Chat landing page — the empty state.
+ * New Chat landing page â€” the empty state.
  * On send, creates a new chat session and navigates to /chat/[id].
  */
 export function NewChatView() {
@@ -87,9 +87,9 @@ export function NewChatView() {
   );
 }
 
-// ─────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Shared message types
-// ─────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export type Message = {
   id: string;
@@ -191,7 +191,7 @@ export function ChatSessionView({
     setMessages((prev) => [...prev, userMsg]);
     setIsLoading(true);
 
-    // Placeholder AI response — swap with real API call
+    // Placeholder AI response â€” swap with real API call
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
@@ -226,7 +226,7 @@ export function ChatSessionView({
   return (
     <div className="absolute inset-0 flex flex-col bg-background">
       
-      {/* ── CHAT ACTIONS (Top Right) ── */}
+      {/* â”€â”€ CHAT ACTIONS (Top Right) â”€â”€ */}
       <div className="absolute top-2 right-2 z-10 flex items-center gap-1.5 pointer-events-auto">
         <Button variant="ghost" className="rounded-full font-semibold px-4 h-9 text-muted-foreground hover:text-foreground">
           <Share className="size-4 mr-2" />
@@ -257,9 +257,9 @@ export function ChatSessionView({
         </DropdownMenu>
       </div>
 
-      {/* ── MESSAGES ── */}
+      {/* â”€â”€ MESSAGES â”€â”€ */}
       <div className="flex-1 overflow-y-auto w-full">
-        <div className="max-w-6xl mx-auto px-4 pt-8 pb-48 flex flex-col gap-6 w-full">
+        <div className="max-w-3xl mx-auto px-4 pt-8 pb-48 flex flex-col gap-6 w-full">
           {messages.map((msg) => (
             <div
               key={msg.id}
@@ -422,9 +422,9 @@ export function ChatSessionView({
         </div>
       </div>
 
-      {/* ── BOTTOM INPUT ── */}
+      {/* â”€â”€ BOTTOM INPUT â”€â”€ */}
       <div className="absolute bottom-0 left-0 right-0 px-4 pb-6 pt-2 pointer-events-none bg-transparent flex justify-center">
-        <div className="max-w-6xl w-full flex flex-col gap-2 pointer-events-auto">
+        <div className="max-w-3xl w-full flex flex-col gap-2 pointer-events-auto">
           
           {/* Dynamic Alert Banner */}
           {activeAlert && (

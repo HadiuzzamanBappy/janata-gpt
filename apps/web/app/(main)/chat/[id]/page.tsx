@@ -1,4 +1,4 @@
-import { ChatSessionView } from "@/components/chat-view";
+import { ChatSessionView } from "@/components/chat/chat-view";
 import { getChatById } from "@/lib/chats";
 
 export default async function ChatPage({

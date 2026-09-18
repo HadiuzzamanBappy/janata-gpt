@@ -22,10 +22,10 @@ import { Button } from "@repo/ui"
 
 import { LogIn, Sparkles, LogOut } from "lucide-react"
 import { MainMenu } from "./main-menu"
-import { ChatList } from "./chat-list"
-import { AuthModal } from "./auth-modal"
-import { ChatSearchModal } from "./chat-search-modal"
-import { SettingsModal } from "./settings-modal"
+import { ChatList } from "@/components/chat/chat-list"
+import { AuthModal } from "@/components/auth/auth-modal"
+import { ChatSearchModal } from "@/components/chat/chat-search-modal"
+import { SettingsModal } from "@/components/settings/settings-modal"
 import { User } from "@supabase/supabase-js"
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
@@ -45,7 +45,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
     await supabase.auth.signOut();
-    router.push('/auth/login');
+    router.push('/login');
     router.refresh();
   };
 

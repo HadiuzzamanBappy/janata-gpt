@@ -1,8 +1,8 @@
-import {
+﻿import {
   SidebarProvider,
   SidebarInset,
 } from "@repo/ui";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
 import { cookies } from "next/headers";
 import { createSupabaseServerClient } from "@repo/auth/server";
 
