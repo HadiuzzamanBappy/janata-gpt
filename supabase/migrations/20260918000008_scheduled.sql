@@ -4,6 +4,7 @@
 CREATE TABLE public.scheduled_tasks (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid REFERENCES public.users(id) ON DELETE CASCADE,
+  title text NOT NULL,
   prompt_content text NOT NULL,
   cron_expression text NOT NULL,
   target_plugin_id uuid REFERENCES public.plugins(id) ON DELETE SET NULL,

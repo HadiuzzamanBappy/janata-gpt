@@ -4,8 +4,12 @@
 CREATE TABLE public.saas_plans (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
+  price_label text,          -- e.g., '$20/month'
+  test_id text,              -- LemonSqueezy test variant ID
+  live_id text,              -- LemonSqueezy live variant ID
   monthly_price numeric,
   yearly_price numeric,
+  features_json jsonb DEFAULT '[]'::jsonb, -- Array of strings for UI feature bullets
   limits_json jsonb DEFAULT '{}'::jsonb,
   created_at timestamptz DEFAULT now()
 );
@@ -40,7 +44,7 @@ CREATE POLICY "Org members can read subscriptions" ON public.saas_subscriptions 
 -- ==============================================================================
 -- 3. SEED PRODUCTS
 -- ==============================================================================
-INSERT INTO public.saas_plans (name, monthly_price, yearly_price, limits_json) VALUES
-('Free', 0, 0, '{"max_documents": 3, "max_chats": 10, "max_tokens": 50000}'::jsonb),
-('ChatGPT Plus', 20, 200, '{"max_documents": 1000, "max_chats": 1000, "max_tokens": 2000000}'::jsonb),
-('ChatGPT Team', 30, 300, '{"max_documents": 10000, "max_chats": 10000, "max_tokens": 10000000}'::jsonb);
+INSERT INTO public.saas_plans (name, price_label, test_id, live_id, monthly_price, yearly_price, features_json, limits_json) VALUES
+('Free', '$0/forever', null, null, 0, 0, '["10 chats per month", "Standard models"]'::jsonb, '{"max_documents": 3, "max_chats": 10}'::jsonb),
+('Starter', '$10/month', 'test_variant_123', 'live_variant_123', 10, 100, '["Unlimited chats", "Pro models"]'::jsonb, '{"max_documents": 1000, "max_chats": -1}'::jsonb),
+('Pro', '$20/month', 'test_variant_456', 'live_variant_456', 20, 200, '["Everything in Starter", "API Access"]'::jsonb, '{"max_documents": 10000, "max_chats": -1}'::jsonb);

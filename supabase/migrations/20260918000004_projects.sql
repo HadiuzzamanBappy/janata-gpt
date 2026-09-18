@@ -7,7 +7,10 @@ CREATE TABLE public.projects (
   owner_id uuid REFERENCES public.users(id) ON DELETE CASCADE,
   name text NOT NULL,
   description text,
+  emoji text,
   color text,
+  is_archived boolean DEFAULT false,
+  share_token uuid UNIQUE,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );

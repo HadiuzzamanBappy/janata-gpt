@@ -19,6 +19,8 @@ CREATE TABLE public.org_organizations (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
   slug text UNIQUE NOT NULL,
+  logo_url text,
+  settings_json jsonb DEFAULT '{}'::jsonb,
   owner_id uuid REFERENCES public.users(id) ON DELETE RESTRICT,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()

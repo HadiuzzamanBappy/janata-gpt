@@ -7,6 +7,7 @@ CREATE TABLE public.chat_sessions (
   user_id uuid REFERENCES public.users(id) ON DELETE CASCADE,
   project_id uuid REFERENCES public.projects(id) ON DELETE SET NULL,
   title text,
+  share_token uuid UNIQUE,
   is_pinned boolean DEFAULT false,
   is_archived boolean DEFAULT false,
   metadata_json jsonb DEFAULT '{}'::jsonb,
@@ -23,6 +24,10 @@ CREATE TABLE public.chat_messages (
   model text,
   input_tokens int,
   output_tokens int,
+  finish_reason text,
+  feedback_rating text CHECK (feedback_rating IN ('upvote', 'downvote')),
+  feedback_comment text,
+  tool_calls_json jsonb,
   created_at timestamptz DEFAULT now()
 );
 
@@ -33,36 +38,13 @@ CREATE TABLE public.chat_attachments (
   created_at timestamptz DEFAULT now()
 );
 
-CREATE TABLE public.chat_tool_calls (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  message_id uuid REFERENCES public.chat_messages(id) ON DELETE CASCADE,
-  plugin_id uuid REFERENCES public.plugins(id) ON DELETE SET NULL,
-  arguments_json jsonb,
-  result_json jsonb,
-  latency_ms int,
-  created_at timestamptz DEFAULT now()
-);
-
-CREATE TABLE public.chat_feedback (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  message_id uuid REFERENCES public.chat_messages(id) ON DELETE CASCADE,
-  user_id uuid REFERENCES public.users(id) ON DELETE CASCADE,
-  rating int CHECK (rating IN (1, -1)),
-  comment text,
-  created_at timestamptz DEFAULT now()
-);
-
 -- ==============================================================================
 -- 2. RLS POLICIES
 -- ==============================================================================
 ALTER TABLE public.chat_sessions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.chat_messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.chat_attachments ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.chat_tool_calls ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.chat_feedback ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Users access own sessions" ON public.chat_sessions FOR ALL USING (user_id = auth.uid());
 CREATE POLICY "Users access own messages" ON public.chat_messages FOR ALL USING (EXISTS (SELECT 1 FROM public.chat_sessions c WHERE c.id = session_id AND c.user_id = auth.uid()));
 CREATE POLICY "Users access attachments" ON public.chat_attachments FOR ALL USING (EXISTS (SELECT 1 FROM public.chat_messages m JOIN public.chat_sessions c ON m.session_id = c.id WHERE m.id = message_id AND c.user_id = auth.uid()));
-CREATE POLICY "Users access tool calls" ON public.chat_tool_calls FOR ALL USING (EXISTS (SELECT 1 FROM public.chat_messages m JOIN public.chat_sessions c ON m.session_id = c.id WHERE m.id = message_id AND c.user_id = auth.uid()));
-CREATE POLICY "Users access feedback" ON public.chat_feedback FOR ALL USING (user_id = auth.uid());

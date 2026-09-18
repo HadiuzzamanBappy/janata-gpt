@@ -16,9 +16,11 @@ CREATE TABLE public.sys_files (
 CREATE TABLE public.library_items (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid REFERENCES public.users(id) ON DELETE CASCADE,
-  project_id uuid REFERENCES public.projects(id) ON DELETE CASCADE,
+  project_id uuid REFERENCES public.projects(id) ON DELETE SET NULL,
   file_id uuid REFERENCES public.sys_files(id) ON DELETE CASCADE, -- Optional if it's a file
+  title text NOT NULL,
   content text, -- Optional if it's just a text snippet
+  tags text[] DEFAULT '{}',
   type text NOT NULL CHECK (type IN ('file', 'snippet', 'prompt')),
   created_at timestamptz DEFAULT now()
 );
