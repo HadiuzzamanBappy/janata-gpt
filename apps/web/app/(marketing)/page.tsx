@@ -34,10 +34,10 @@ export default function MarketingPage() {
               </p>
             </div>
             <div className="space-x-4 pt-4">
-              <Button render={<Link href="/c/new" />} size="lg" className="h-12 px-8 rounded-full bg-white text-black hover:bg-zinc-200">
+              <Button nativeButton={false} render={<Link href="/c/new" />} size="lg" className="h-12 px-8 rounded-full bg-white text-black hover:bg-zinc-200">
                 Start chatting
               </Button>
-              <Button render={<Link href="#features" />} variant="outline" size="lg" className="h-12 px-8 rounded-full border-zinc-800 hover:bg-zinc-900 hover:text-white text-white bg-transparent">
+              <Button nativeButton={false} render={<Link href="#features" />} variant="outline" size="lg" className="h-12 px-8 rounded-full border-zinc-800 hover:bg-zinc-900 hover:text-white text-white bg-transparent">
                 Learn more
               </Button>
             </div>
