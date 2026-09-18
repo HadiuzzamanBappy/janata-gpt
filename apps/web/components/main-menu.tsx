@@ -29,7 +29,7 @@ const authMenu = [
   { title: "Search chats", url: "#", icon: Search },
   { title: "Images", url: "#", icon: ImageIcon },
   { title: "Library", url: "#", icon: Library },
-  { title: "Scheduled", url: "#", icon: Clock },
+  { title: "Scheduled", url: "/scheduled", icon: Clock },
   { title: "Plugins", url: "/plugins", icon: Blocks },
   { title: "Projects", url: "/projects", icon: FolderGit2 },
 ];

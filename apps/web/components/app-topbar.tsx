@@ -20,6 +20,7 @@ export function AppTopbar({ user }: { user?: User | null }) {
 
   // Show back button on detail pages (e.g. /plugins/[id])
   const isDetailPage = /^\/plugins\/.+/.test(pathname);
+  const isChatPage = pathname.startsWith("/chat/");
 
   return (
     <header className="sticky top-0 z-20 flex h-16 shrink-0 items-center justify-between gap-2 px-3 w-full bg-transparent">
@@ -82,33 +83,38 @@ export function AppTopbar({ user }: { user?: User | null }) {
               <Sparkles className="size-4 mr-2" />
               Upgrade plan
             </Button>
-            <Button variant="ghost" className="rounded-full font-semibold px-4 h-9 text-muted-foreground hover:text-foreground">
-              <Share className="size-4 mr-2" />
-              Share
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex h-9 w-9 items-center justify-center rounded-full bg-muted/80 hover:bg-muted text-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                <MoreHorizontal className="size-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 rounded-xl shadow-lg border-border/60 p-1">
-                <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium">
-                  <Files className="size-4 text-muted-foreground" />
-                  View files in chat
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium">
-                  <Pin className="size-4 text-muted-foreground" />
-                  Pin chat
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium">
-                  <Archive className="size-4 text-muted-foreground" />
-                  Archive
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium text-destructive focus:text-destructive focus:bg-destructive/10">
-                  <Trash2 className="size-4" />
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            
+            {isChatPage && (
+              <>
+                <Button variant="ghost" className="rounded-full font-semibold px-4 h-9 text-muted-foreground hover:text-foreground">
+                  <Share className="size-4 mr-2" />
+                  Share
+                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="flex h-9 w-9 items-center justify-center rounded-full bg-muted/80 hover:bg-muted text-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                    <MoreHorizontal className="size-4" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 rounded-xl shadow-lg border-border/60 p-1">
+                    <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium">
+                      <Files className="size-4 text-muted-foreground" />
+                      View files in chat
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium">
+                      <Pin className="size-4 text-muted-foreground" />
+                      Pin chat
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium">
+                      <Archive className="size-4 text-muted-foreground" />
+                      Archive
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium text-destructive focus:text-destructive focus:bg-destructive/10">
+                      <Trash2 className="size-4" />
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            )}
           </>
         ) : (
           <>
