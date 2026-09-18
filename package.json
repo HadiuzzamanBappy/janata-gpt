@@ -9,7 +9,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "clean": "git clean -xdf -e .env -e .env.local",
-    "ui:update": "pnpm dlx shadcn@latest apply --preset bciyLJq4",
+    "ui:update": "pnpm dlx shadcn@latest apply --preset bciyLJq4 -c packages/ui",
     "test:models": "node scripts/test/common/test-list-models.js",
     "test:limits": "node scripts/test/common/test-provider-limits.js",
     "test:zai": "node scripts/test/common/test-zai-local.js",

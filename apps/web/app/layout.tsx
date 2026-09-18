@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@repo/ui";
-import "@repo/ui/styles/globals.css";
+import "@repo/ui/globals.css";
 
 export const metadata: Metadata = {
   title: "ChatGPT Clone",
