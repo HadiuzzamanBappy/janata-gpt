@@ -28,12 +28,15 @@ export default async function RootLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
+  const sidebarState = cookieStore.get("sidebar_state")?.value;
+  const defaultOpen = sidebarState === "false" ? false : true;
+
   return (
     <html lang="en" suppressHydrationWarning className="dark">
       <body className="bg-background text-foreground antialiased min-h-screen">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <TooltipProvider delay={0}>
-            <SidebarProvider defaultOpen={false}>
+            <SidebarProvider defaultOpen={defaultOpen}>
               <AppSidebar user={user} />
               <SidebarInset className="flex flex-col overflow-hidden">
                 <AppTopbar user={user} />

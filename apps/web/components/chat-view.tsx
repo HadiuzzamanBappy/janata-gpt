@@ -3,7 +3,32 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AppChatInput } from "@/components/chat-input";
-import { Sparkles, Copy, Share, Pencil, RefreshCw, MoreHorizontal } from "lucide-react";
+import { 
+  Sparkles, 
+  Copy,
+  Pencil, 
+  RefreshCw, 
+  MoreHorizontal,
+  BookOpen,
+  GitMerge,
+  Volume2,
+  ThumbsUp,
+  ThumbsDown,
+  Check
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  Button
+} from "@repo/ui";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { cn } from "@repo/ui/lib/utils";
+import TextareaAutosize from "react-textarea-autosize";
 
 const SUGGESTIONS = [
   "What can you do?",
@@ -91,6 +116,9 @@ export function ChatSessionView({
     return [];
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const [editContent, setEditContent] = useState("");
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const initialized = useRef(false);
 
@@ -135,6 +163,23 @@ export function ChatSessionView({
     }, 1200);
   }
 
+  function handleSaveEdit(id: string) {
+    if (!editContent.trim()) {
+      setEditingMessageId(null);
+      return;
+    }
+    
+    // Update the message content
+    setMessages(prev => prev.map(m => m.id === id ? { ...m, content: editContent.trim() } : m));
+    setEditingMessageId(null);
+  }
+
+  function handleCopy(id: string, text: string) {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  }
+
   return (
     <div className="absolute inset-0 flex flex-col bg-background">
 
@@ -146,61 +191,155 @@ export function ChatSessionView({
               key={msg.id}
               className={`flex gap-3 group ${msg.role === "user" ? "justify-end" : "justify-start"}`}
             >
-              {msg.role === "assistant" && (
-                <div className="w-8 h-8 rounded-full bg-primary/15 border border-primary/20 flex items-center justify-center shrink-0 mt-1">
-                  <Sparkles className="w-4 h-4 text-primary" />
-                </div>
-              )}
-              <div className={`flex flex-col gap-1 max-w-[75%] ${msg.role === "user" ? "items-end" : "items-start"}`}>
-                <div
-                  className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${
-                    msg.role === "user"
-                      ? "bg-primary text-primary-foreground rounded-br-sm"
-                      : "bg-muted text-foreground rounded-bl-sm"
-                  }`}
-                >
-                  {msg.content}
+              <div className={`flex flex-col gap-1 w-full max-w-[85%] ${msg.role === "user" ? "items-end" : "items-start"}`}>
+                {editingMessageId === msg.id ? (
+                  <div className="flex flex-col gap-3 w-full bg-muted/60 p-4 rounded-3xl mt-2">
+                    <TextareaAutosize
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                      className="w-full bg-transparent text-foreground text-sm resize-none outline-none leading-relaxed"
+                      minRows={2}
+                      autoFocus
+                    />
+                    <div className="flex items-center justify-end gap-2 mt-2">
+                      <Button variant="ghost" className="h-8 px-4 rounded-full text-xs font-semibold" onClick={() => setEditingMessageId(null)}>
+                        Cancel
+                      </Button>
+                      <Button className="h-8 px-4 rounded-full text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => handleSaveEdit(msg.id)}>
+                        Send
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div
+                      className={`text-sm leading-relaxed ${
+                        msg.role === "user"
+                          ? "px-4 py-3 rounded-2xl bg-primary text-primary-foreground rounded-br-sm"
+                          : "text-foreground pt-1 flex flex-col gap-2 w-full"
+                      }`}
+                    >
+                      {msg.role === "user" ? (
+                        msg.content
+                      ) : (
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        code({ inline, className, children, ...props }: React.HTMLAttributes<HTMLElement> & { inline?: boolean }) {
+                          const match = /language-(\w+)/.exec(className || "");
+                          return !inline && match ? (
+                            <SyntaxHighlighter
+                              {...props}
+                              style={vscDarkPlus}
+                              language={match[1]}
+                              PreTag="div"
+                              className="rounded-lg my-2 border border-border/50 text-xs"
+                            >
+                              {String(children).replace(/\n$/, "")}
+                            </SyntaxHighlighter>
+                          ) : (
+                            <code {...props} className={cn("bg-muted px-1.5 py-0.5 rounded-md font-mono text-[0.85em]", className)}>
+                              {children}
+                            </code>
+                          );
+                        },
+                        p: ({ children }) => <p className="mb-2 last:mb-0 leading-7">{children}</p>,
+                        ul: ({ children }) => <ul className="list-disc pl-5 mb-2">{children}</ul>,
+                        ol: ({ children }) => <ol className="list-decimal pl-5 mb-2">{children}</ol>,
+                        li: ({ children }) => <li className="mb-1">{children}</li>,
+                        h1: ({ children }) => <h1 className="text-2xl font-bold mb-2 mt-4">{children}</h1>,
+                        h2: ({ children }) => <h2 className="text-xl font-bold mb-2 mt-4">{children}</h2>,
+                        h3: ({ children }) => <h3 className="text-lg font-bold mb-2 mt-3">{children}</h3>,
+                      }}
+                    >
+                      {msg.content}
+                    </ReactMarkdown>
+                  )}
                 </div>
 
-                {/* Hover CTA Actions */}
-                <div className={`flex items-center gap-1 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                  <button className="p-1.5 hover:bg-muted hover:text-foreground rounded-md transition-colors" title="Copy">
-                    <Copy className="size-3.5" />
+                {/* CTA Actions */}
+                <div className={`flex items-center gap-1 mt-0.5 transition-opacity text-muted-foreground ${msg.role === "user" ? "justify-end opacity-0 group-hover:opacity-100" : "justify-start opacity-100"}`}>
+                  <button 
+                    className="p-1.5 hover:bg-muted hover:text-foreground rounded-full transition-colors" 
+                    title="Copy"
+                    onClick={() => handleCopy(msg.id, msg.content)}
+                  >
+                    {copiedId === msg.id ? <Check className="size-3.5 text-green-500" /> : <Copy className="size-3.5" />}
                   </button>
                   {msg.role === "user" ? (
                     <>
-                      <button className="p-1.5 hover:bg-muted hover:text-foreground rounded-md transition-colors" title="Share">
-                        <Share className="size-3.5" />
-                      </button>
-                      <button className="p-1.5 hover:bg-muted hover:text-foreground rounded-md transition-colors" title="Edit">
+                      <button 
+                        onClick={() => {
+                          setEditContent(msg.content);
+                          setEditingMessageId(msg.id);
+                        }}
+                        className="p-1.5 hover:bg-muted hover:text-foreground rounded-full transition-colors" 
+                        title="Edit"
+                      >
                         <Pencil className="size-3.5" />
                       </button>
                     </>
                   ) : (
                     <>
-                      <button className="p-1.5 hover:bg-muted hover:text-foreground rounded-md transition-colors" title="Regenerate">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger
+                          className="p-1.5 hover:bg-muted hover:text-foreground rounded-full transition-colors outline-none flex items-center gap-0.5"
+                          title="Feedback"
+                        >
+                          <ThumbsUp className="size-3.5" />
+                          <ThumbsDown className="size-3.5 mt-1" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" className="w-44 rounded-xl shadow-lg border-border/60" sideOffset={8}>
+                          <DropdownMenuItem className="cursor-pointer gap-2.5 py-2">
+                            <ThumbsUp className="size-4 text-muted-foreground" /><span>Good response</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="cursor-pointer gap-2.5 py-2">
+                            <ThumbsDown className="size-4 text-muted-foreground" /><span>Bad response</span>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+
+                      <button className="p-1.5 hover:bg-muted hover:text-foreground rounded-full transition-colors" title="Regenerate">
                         <RefreshCw className="size-3.5" />
                       </button>
-                      <button className="p-1.5 hover:bg-muted hover:text-foreground rounded-md transition-colors" title="More">
-                        <MoreHorizontal className="size-3.5" />
-                      </button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger
+                          className="p-1.5 hover:bg-muted hover:text-foreground rounded-full transition-colors outline-none"
+                          title="More options"
+                        >
+                          <MoreHorizontal className="size-3.5" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" className="w-48 rounded-xl shadow-lg border-border/60">
+                          <div className="px-2 py-1.5 text-xs text-muted-foreground font-medium">
+                            Today, {msg.timestamp.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+                          </div>
+                          <DropdownMenuItem className="cursor-pointer gap-2.5 py-2">
+                            <BookOpen className="size-4 text-muted-foreground" /><span>View sources</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="cursor-pointer gap-2.5 py-2">
+                            <GitMerge className="size-4 text-muted-foreground" /><span>Branch in new chat</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="cursor-pointer gap-2.5 py-2">
+                            <Volume2 className="size-4 text-muted-foreground" /><span>Read aloud</span>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </>
                   )}
                 </div>
-              </div>
+              </>
+            )}
             </div>
+          </div>
           ))}
 
           {/* Typing indicator */}
           {isLoading && (
             <div className="flex gap-3 justify-start">
-              <div className="w-8 h-8 rounded-full bg-primary/15 border border-primary/20 flex items-center justify-center shrink-0 mt-1">
-                <Sparkles className="w-4 h-4 text-primary" />
-              </div>
-              <div className="bg-muted rounded-2xl rounded-bl-sm px-4 py-3 flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 animate-bounce [animation-delay:0ms]" />
-                <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 animate-bounce [animation-delay:150ms]" />
-                <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 animate-bounce [animation-delay:300ms]" />
+              <div className="text-sm leading-relaxed text-foreground pt-1 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" />
               </div>
             </div>
           )}

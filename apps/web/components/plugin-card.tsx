@@ -16,12 +16,12 @@ export function PluginCard({ plugin, className }: PluginCardProps) {
         className
       )}
     >
-      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-border/50 flex items-center justify-center shrink-0">
-        <span className="font-bold text-lg text-primary">{plugin.name.charAt(0)}</span>
+      <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center shrink-0">
+        <span className="font-semibold text-base text-foreground">{plugin.name.charAt(0)}</span>
       </div>
       
-      <div className="flex flex-col gap-1 w-full">
-        <h3 className="font-semibold text-base text-card-foreground group-hover:text-primary transition-colors line-clamp-1">
+      <div className="flex flex-col w-full">
+        <h3 className="font-semibold text-sm text-card-foreground group-hover:text-primary transition-colors line-clamp-1">
           {plugin.name}
         </h3>
         <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">

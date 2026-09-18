@@ -5,12 +5,11 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
+  DropdownMenuItem,
   Button,
-  ThemeToggle
 } from "@repo/ui";
-import { ChevronDown, ArrowLeft } from "lucide-react";
+import { ChevronDown, ArrowLeft, Sparkles, Share, MoreHorizontal, Files, Pin, Archive, Trash2 } from "lucide-react";
 import { User } from "@supabase/supabase-js";
-import { UserMenu } from "./user-menu";
 import { LoginModal } from "./login-modal";
 import { useState } from "react";
 
@@ -23,7 +22,7 @@ export function AppTopbar({ user }: { user?: User | null }) {
   const isDetailPage = /^\/plugins\/.+/.test(pathname);
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 shrink-0 items-center justify-between gap-2 px-3 w-full bg-background/80 backdrop-blur-md">
+    <header className="sticky top-0 z-20 flex h-16 shrink-0 items-center justify-between gap-2 px-3 w-full bg-transparent">
       <div className="flex items-center gap-2 pl-2">
         {isDetailPage ? (
           <button
@@ -76,10 +75,41 @@ export function AppTopbar({ user }: { user?: User | null }) {
       </div>
 
       {/* Right side auth buttons */}
-      <div className="flex items-center gap-2 mr-2">
-        <ThemeToggle />
+      <div className="flex items-center gap-1.5 mr-2">
         {user ? (
-          <UserMenu user={user} />
+          <>
+            <Button variant="ghost" className="rounded-full font-semibold px-4 h-9 text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-400/10">
+              <Sparkles className="size-4 mr-2" />
+              Upgrade plan
+            </Button>
+            <Button variant="ghost" className="rounded-full font-semibold px-4 h-9 text-muted-foreground hover:text-foreground">
+              <Share className="size-4 mr-2" />
+              Share
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex h-9 w-9 items-center justify-center rounded-full bg-muted/80 hover:bg-muted text-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                <MoreHorizontal className="size-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 rounded-xl shadow-lg border-border/60 p-1">
+                <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium">
+                  <Files className="size-4 text-muted-foreground" />
+                  View files in chat
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium">
+                  <Pin className="size-4 text-muted-foreground" />
+                  Pin chat
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium">
+                  <Archive className="size-4 text-muted-foreground" />
+                  Archive
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium text-destructive focus:text-destructive focus:bg-destructive/10">
+                  <Trash2 className="size-4" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
         ) : (
           <>
             <Button variant="ghost" className="rounded-full font-semibold px-4 h-9" onClick={() => setIsLoginModalOpen(true)}>
@@ -92,9 +122,9 @@ export function AppTopbar({ user }: { user?: User | null }) {
         )}
       </div>
 
-      <LoginModal 
-        open={isLoginModalOpen} 
-        onOpenChange={setIsLoginModalOpen} 
+      <LoginModal
+        open={isLoginModalOpen}
+        onOpenChange={setIsLoginModalOpen}
       />
     </header>
   );

@@ -26,6 +26,7 @@ import {
 // Sidebar tools data
 const authMenu = [
   { title: "New chat", url: "/", icon: SquarePen },
+  { title: "Search chats", url: "#", icon: Search },
   { title: "Images", url: "#", icon: ImageIcon },
   { title: "Library", url: "#", icon: Library },
   { title: "Scheduled", url: "#", icon: Clock },
@@ -41,17 +42,18 @@ const nonAuthMenu = [
   { title: "Deep research", url: "#", icon: Telescope },
 ];
 
-export function MainMenu({ isAuth, onLoginClick }: { isAuth?: boolean; onLoginClick?: () => void }) {
+export function MainMenu({ isAuth, onLoginClick, onSearchClick }: { isAuth?: boolean; onLoginClick?: () => void; onSearchClick?: () => void }) {
   const pathname = usePathname();
   const menuItems = isAuth ? authMenu : nonAuthMenu;
 
   return (
-    <SidebarGroup>
-      <SidebarMenu className="gap-1.5">
+    <SidebarGroup className="pt-2">
+      <SidebarMenu>
         {menuItems.map((item) => {
           const isActive =
-            item.url !== "#" &&
-            (item.url === "/"
+            item.url === "#"
+              ? false
+              : (item.url === "/"
               ? pathname === "/"
               : pathname.startsWith(item.url));
 
@@ -86,6 +88,20 @@ export function MainMenu({ isAuth, onLoginClick }: { isAuth?: boolean; onLoginCl
                     </div>
                   </DropdownMenuContent>
                 </DropdownMenu>
+              </SidebarMenuItem>
+            );
+          }
+
+          if (item.title === "Search chats" && isAuth) {
+            return (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  tooltip={item.title}
+                  onClick={onSearchClick}
+                >
+                  <item.icon />
+                  <span>{item.title}</span>
+                </SidebarMenuButton>
               </SidebarMenuItem>
             );
           }

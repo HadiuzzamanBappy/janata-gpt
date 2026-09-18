@@ -1,6 +1,8 @@
 "use client"
 
 import * as React from "react"
+import { useRouter } from "next/navigation"
+import { createSupabaseBrowserClient } from "@repo/auth/client"
 
 import {
   Sidebar,
@@ -12,14 +14,19 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarTrigger,
+  SidebarSeparator,
+  Avatar,
+  AvatarFallback,
+  AvatarImage
 } from "@repo/ui"
 import { Button } from "@repo/ui"
 
-import { LogIn, Sparkles, Search } from "lucide-react"
+import { LogIn, Sparkles, LogOut } from "lucide-react"
 import { MainMenu } from "./main-menu"
 import { ChatList } from "./chat-list"
 import { LoginModal } from "./login-modal"
 import { ChatSearchModal } from "./chat-search-modal"
+import { SettingsModal } from "./settings-modal"
 import { User } from "@supabase/supabase-js"
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
@@ -29,7 +36,19 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 export function AppSidebar({ user, ...props }: AppSidebarProps) {
   const [isLoginModalOpen, setIsLoginModalOpen] = React.useState(false);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
   const isAuth = !!user;
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    const supabase = createSupabaseBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+    await supabase.auth.signOut();
+    router.push('/login');
+    router.refresh();
+  };
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -46,30 +65,59 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
     <Sidebar collapsible="icon" variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
-          <SidebarMenuItem className="flex items-center justify-between group/brand">
-            <SidebarMenuButton tooltip="Janata GPT" render={<a href="#" />} className="px-1.5 hover:bg-transparent cursor-default w-auto group-data-[collapsible=icon]:hidden">
-              <Sparkles className="size-5" />
-              <span className="font-semibold text-base tracking-tight">Janata GPT</span>
+          <SidebarMenuItem className="relative flex items-center justify-between group/brand h-10">
+            <SidebarMenuButton
+              tooltip="Janata GPT"
+              render={<a href="#" />}
+              className="w-auto px-1.5 hover:bg-transparent cursor-default group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+            >
+              <Sparkles className="size-5 transition-opacity group-data-[collapsible=icon]:group-hover/brand:opacity-0" />
+              <span className="font-semibold text-base tracking-tight group-data-[collapsible=icon]:hidden">Janata GPT</span>
             </SidebarMenuButton>
-            <div className="flex items-center gap-0.5 group-data-[collapsible=icon]:mx-auto">
-              {isAuth && (
-                <SidebarMenuButton 
-                  tooltip="Search (Ctrl+K)" 
-                  onClick={() => setIsSearchOpen(true)}
-                  className="w-8 h-8 p-0 flex items-center justify-center group-data-[collapsible=icon]:hidden hover:bg-muted"
-                >
-                  <Search className="w-4 h-4 text-muted-foreground" />
-                </SidebarMenuButton>
-              )}
+
+            <div className="flex items-center group-data-[collapsible=icon]:absolute group-data-[collapsible=icon]:inset-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:pointer-events-none group-data-[collapsible=icon]:group-hover/brand:opacity-100 group-data-[collapsible=icon]:group-hover/brand:pointer-events-auto transition-opacity">
               <SidebarTrigger />
             </div>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+      <SidebarSeparator className="mb-2 group-data-[collapsible=icon]:hidden" />
       <SidebarContent>
-        <MainMenu isAuth={isAuth} onLoginClick={() => setIsLoginModalOpen(true)} />
+        <MainMenu
+          isAuth={isAuth}
+          onLoginClick={() => setIsLoginModalOpen(true)}
+          onSearchClick={() => setIsSearchOpen(true)}
+        />
         <ChatList isAuth={isAuth} />
       </SidebarContent>
+      {isAuth && (
+        <SidebarFooter className="p-2 flex-row gap-1">
+          <Button
+            variant="ghost"
+            className="flex-1 justify-start gap-2.5 h-12 px-2 rounded-lg hover:bg-muted font-medium overflow-hidden"
+            onClick={() => setIsSettingsOpen(true)}
+          >
+            <Avatar className="w-8 h-8 shrink-0 border border-border/50">
+              <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || "User"} />
+              <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
+                {user.user_metadata?.full_name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || "U"}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col items-start overflow-hidden group-data-[collapsible=icon]:hidden">
+              <span className="text-sm font-semibold text-foreground truncate w-full">{user.user_metadata?.full_name || "User"}</span>
+              <span className="text-xs text-muted-foreground truncate w-full">{user.email}</span>
+            </div>
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-12 shrink-0 h-12 p-0 rounded-lg text-muted-foreground hover:text-foreground hover:bg-destructive/10 hover:text-destructive group-data-[collapsible=icon]:hidden transition-colors"
+            onClick={handleSignOut}
+            title="Log out"
+          >
+            <LogOut className="size-4" />
+          </Button>
+        </SidebarFooter>
+      )}
       {!isAuth && (
         <SidebarFooter className="p-0">
           <div className="p-4 flex flex-col gap-4 group-data-[collapsible=icon]:hidden bg-sidebar-accent/50 border border-sidebar-border rounded-xl m-2 mt-0">
@@ -79,8 +127,8 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
                 Log in to get answers based on saved chats, plus create images and upload files.
               </p>
             </div>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="w-full rounded-full font-semibold bg-background shadow-sm hover:bg-muted"
               onClick={() => setIsLoginModalOpen(true)}
             >
@@ -90,8 +138,8 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
 
           <SidebarMenu className="hidden group-data-[collapsible=icon]:flex px-2 pb-2">
             <SidebarMenuItem>
-              <SidebarMenuButton 
-                tooltip="Log in" 
+              <SidebarMenuButton
+                tooltip="Log in"
                 className="text-emerald-500 hover:text-emerald-600 hover:bg-emerald-500/10 dark:text-emerald-400 dark:hover:text-emerald-300 dark:hover:bg-emerald-400/10 transition-colors"
                 onClick={() => setIsLoginModalOpen(true)}
               >
@@ -102,14 +150,19 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
         </SidebarFooter>
       )}
       <SidebarRail />
-      
-      <LoginModal 
-        open={isLoginModalOpen} 
-        onOpenChange={setIsLoginModalOpen} 
+
+      <LoginModal
+        open={isLoginModalOpen}
+        onOpenChange={setIsLoginModalOpen}
       />
-      <ChatSearchModal 
-        open={isSearchOpen} 
-        onOpenChange={setIsSearchOpen} 
+      <ChatSearchModal
+        open={isSearchOpen}
+        onOpenChange={setIsSearchOpen}
+      />
+      <SettingsModal
+        open={isSettingsOpen}
+        onOpenChange={setIsSettingsOpen}
+        user={user || null}
       />
     </Sidebar>
   )
