@@ -31,7 +31,7 @@ const authMenu = [
   { title: "Library", url: "#", icon: Library },
   { title: "Scheduled", url: "#", icon: Clock },
   { title: "Plugins", url: "/plugins", icon: Blocks },
-  { title: "Projects", url: "#", icon: FolderGit2 },
+  { title: "Projects", url: "/projects", icon: FolderGit2 },
 ];
 
 const nonAuthMenu = [
