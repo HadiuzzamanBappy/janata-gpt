@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useRouter } from "next/navigation"
 import {
   Palette,
   User as UserIcon,
@@ -47,6 +48,7 @@ const navItems = [
 ]
 
 export function SettingsModal({ open, onOpenChange, user, onSignOut }: SettingsModalProps) {
+  const router = useRouter()
   const [activeTab, setActiveTab] = React.useState("Profile")
   const [displayName, setDisplayName] = React.useState(user?.user_metadata?.full_name || "")
 
@@ -81,31 +83,28 @@ export function SettingsModal({ open, onOpenChange, user, onSignOut }: SettingsM
             </SidebarContent>
             
             {user && (
-              <div className="px-4 pb-4 mt-auto flex flex-col gap-4">
-                <div className="flex flex-col gap-3">
-                  <div className="flex flex-col gap-1 px-1 mt-2">
-                    <h3 className="font-semibold text-sm text-foreground tracking-tight">Upgrade to Pro</h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
-                      Unlock advanced models & image generation.
-                    </p>
-                  </div>
-                  <Button
-                    variant="outline"
-                    className="w-full rounded-xl font-semibold bg-background shadow-sm hover:bg-muted gap-2 text-sm h-9"
-                  >
-                    <Sparkles className="w-4 h-4 text-primary" />
-                    Upgrade plan
-                  </Button>
-                </div>
+              <div className="px-3 pb-3 mt-auto flex flex-col gap-1.5">
+                {/* Assuming free user here. If pro, render nothing */}
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start gap-2.5 font-medium bg-amber-500/10 text-amber-600 dark:text-amber-500 hover:bg-amber-500/20 transition-colors rounded-lg h-9"
+                  onClick={() => {
+                    onOpenChange(false);
+                    router.push('/pricing');
+                  }}
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Upgrade plan
+                </Button>
                 
                 <Button
                   variant="ghost"
-                  className="w-full justify-start font-medium text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors rounded-xl h-9"
+                  className="w-full justify-start gap-2.5 font-medium bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors rounded-lg h-9"
                   onClick={() => {
                     if (onSignOut) onSignOut();
                   }}
                 >
-                  <LogOut className="w-4 h-4 mr-2" />
+                  <LogOut className="w-4 h-4" />
                   Log out
                 </Button>
               </div>

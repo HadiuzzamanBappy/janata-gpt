@@ -52,7 +52,8 @@ const IMAGE_DATA = [
 
 export default function ImagesPage() {
   return (
-    <div className="flex flex-col h-full w-full max-w-5xl mx-auto px-4 py-6 md:px-8">
+    <div className="flex flex-col h-full w-full overflow-y-auto bg-background">
+      <div className="flex flex-col w-full max-w-6xl mx-auto px-4 py-6 md:px-8">
       {/* Header */}
       <h1 className="text-2xl font-bold tracking-tight text-foreground mb-6">Images</h1>
 
@@ -129,6 +130,7 @@ export default function ImagesPage() {
             </div>
           ))}
         </div>
+      </div>
       </div>
     </div>
   );

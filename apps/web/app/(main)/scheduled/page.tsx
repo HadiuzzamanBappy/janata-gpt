@@ -79,7 +79,8 @@ export default function ScheduledPage() {
   const [filter, setFilter] = useState<"Active" | "Paused" | "Completed">("Active");
 
   return (
-    <div className="flex flex-col h-full w-full max-w-4xl mx-auto px-4 py-8 md:px-8">
+    <div className="flex flex-col h-full w-full overflow-y-auto bg-background">
+      <div className="flex flex-col w-full max-w-6xl mx-auto px-4 py-8 md:px-8">
       {/* Header */}
       <div className="flex items-start justify-between w-full mb-10">
         <div className="flex flex-col gap-2">
@@ -177,6 +178,7 @@ export default function ScheduledPage() {
             </div>
           ))}
         </div>
+      </div>
       </div>
     </div>
   );

@@ -4,8 +4,8 @@ import { Search } from "lucide-react";
 
 export default function PluginsPage() {
   return (
-    <div className="flex flex-col h-full w-full overflow-y-auto bg-background p-6 lg:p-10">
-      <div className="max-w-6xl w-full mx-auto flex flex-col gap-8">
+    <div className="flex flex-col h-full w-full overflow-y-auto bg-background">
+      <div className="max-w-6xl w-full mx-auto flex flex-col gap-8 px-4 py-8 pb-12">
 
         {/* Header & Search */}
         <div className="flex flex-col gap-2">
@@ -32,7 +32,7 @@ export default function PluginsPage() {
             return (
               <section key={category} className="flex flex-col gap-3">
                 <h2 className="text-sm font-semibold tracking-tight text-foreground/80">{category}</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {categoryPlugins.map((plugin) => (
                     <PluginCard key={plugin.id} plugin={plugin} />
                   ))}

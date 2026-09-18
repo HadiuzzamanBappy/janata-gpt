@@ -24,8 +24,8 @@ export default async function MainLayout({
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar user={user} />
-      <SidebarInset className="flex flex-col overflow-hidden">
-        <div className="flex flex-1 flex-col overflow-auto relative min-h-0">
+      <SidebarInset className="flex flex-col overflow-hidden bg-background">
+        <div className="flex flex-1 flex-col overflow-hidden w-full relative">
           {children}
         </div>
       </SidebarInset>

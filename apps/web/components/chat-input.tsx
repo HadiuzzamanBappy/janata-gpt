@@ -149,7 +149,7 @@ export function AppChatInput({
 
   return (
     <div className={cn(
-      "w-full relative bg-muted/50 hover:bg-muted border border-border/50 transition-all duration-300 ease-in-out",
+      "w-full relative bg-muted border border-border/50 transition-all duration-300 ease-in-out",
       isExpanded ? "rounded-3xl shadow-sm" : "rounded-full"
     )}>
       

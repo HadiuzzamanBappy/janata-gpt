@@ -12,7 +12,8 @@ export default function ProjectsPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   return (
-    <div className="flex flex-col h-full w-full max-w-5xl mx-auto px-4 py-6 md:px-8">
+    <div className="flex flex-col h-full w-full overflow-y-auto bg-background">
+      <div className="flex flex-col w-full max-w-6xl mx-auto px-4 py-6 md:px-8 min-h-full">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Projects</h1>
@@ -59,6 +60,7 @@ export default function ProjectsPage() {
         open={isCreateModalOpen} 
         onOpenChange={setIsCreateModalOpen} 
       />
+      </div>
     </div>
   );
 }

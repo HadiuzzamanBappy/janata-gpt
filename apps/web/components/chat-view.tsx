@@ -98,6 +98,15 @@ export type Message = {
   timestamp: Date;
 };
 
+export type ChatAlert = {
+  id: string;
+  type: "info" | "promo" | "error";
+  title: string;
+  description: string;
+  actionText?: string;
+  onAction?: () => void;
+};
+
 /**
  * Active chat session view.
  * Receives initial message from the URL query param on first load.
@@ -125,6 +134,7 @@ export function ChatSessionView({
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editContent, setEditContent] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [activeAlert, setActiveAlert] = useState<ChatAlert | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const initialized = useRef(false);
 
@@ -151,6 +161,33 @@ export function ChatSessionView({
       content: text.trim(),
       timestamp: new Date(),
     };
+    
+    // Simulate Alert Triggers based on message count
+    const newUserMsgCount = messages.filter(m => m.role === 'user').length + 1;
+    
+    // 1. Event-Driven Error Trigger (Hit usage limit at 5 messages)
+    if (newUserMsgCount === 5) {
+      setActiveAlert({
+        id: "limit_reached",
+        type: "error",
+        title: "Usage limit reached",
+        description: "You've hit the free tier message limit. Upgrade to Pro to continue chatting.",
+        actionText: "Upgrade to Pro",
+        onAction: () => console.log("Open upgrade modal")
+      });
+    } 
+    // 2. Randomized/Heuristic Trigger (Promo on 2nd message)
+    else if (newUserMsgCount === 2) {
+      setActiveAlert({
+        id: "promo_plus",
+        type: "promo",
+        title: "Improve accuracy for technical work",
+        description: "Upgrade to Plus and use increased reasoning to debug code, work through systems, and solve math or science problems.",
+        actionText: "Get Plus",
+        onAction: () => console.log("Open plus upgrade")
+      });
+    }
+
     setMessages((prev) => [...prev, userMsg]);
     setIsLoading(true);
 
@@ -222,7 +259,7 @@ export function ChatSessionView({
 
       {/* ── MESSAGES ── */}
       <div className="flex-1 overflow-y-auto w-full">
-        <div className="max-w-3xl mx-auto px-4 pt-8 pb-48 flex flex-col gap-6">
+        <div className="max-w-6xl mx-auto px-4 pt-8 pb-48 flex flex-col gap-6 w-full">
           {messages.map((msg) => (
             <div
               key={msg.id}
@@ -386,21 +423,49 @@ export function ChatSessionView({
       </div>
 
       {/* ── BOTTOM INPUT ── */}
-      <div className="absolute bottom-0 left-0 right-0 px-4 pb-6 pt-2 pointer-events-none bg-transparent">
-        <div className="max-w-3xl mx-auto flex flex-col gap-2 pointer-events-auto">
-          {/* Optional Alert */}
-          <div className="w-full bg-muted border border-border/50 rounded-2xl p-3 flex items-start justify-between gap-4 shadow-sm">
-            <div className="flex flex-col gap-0.5">
-              <span className="text-sm font-semibold text-foreground">Improve accuracy for technical work</span>
-              <span className="text-sm text-muted-foreground">Upgrade to Plus and use increased reasoning to debug code, work through systems, and solve math or science problems.</span>
+      <div className="absolute bottom-0 left-0 right-0 px-4 pb-6 pt-2 pointer-events-none bg-transparent flex justify-center">
+        <div className="max-w-6xl w-full flex flex-col gap-2 pointer-events-auto">
+          
+          {/* Dynamic Alert Banner */}
+          {activeAlert && (
+            <div className={`w-full border rounded-2xl p-3 flex items-start justify-between gap-4 shadow-sm ${
+              activeAlert.type === 'error' ? 'bg-destructive/10 border-destructive/20' : 'bg-muted border-border/50'
+            }`}>
+              <div className="flex flex-col gap-0.5">
+                <span className={`text-sm font-semibold ${activeAlert.type === 'error' ? 'text-destructive' : 'text-foreground'}`}>
+                  {activeAlert.title}
+                </span>
+                <span className={`text-sm ${activeAlert.type === 'error' ? 'text-destructive/90' : 'text-muted-foreground'}`}>
+                  {activeAlert.description}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                {activeAlert.actionText && (
+                  <Button 
+                    className={`rounded-full h-8 px-4 text-xs font-semibold ${
+                      activeAlert.type === 'error' 
+                        ? 'bg-destructive text-destructive-foreground hover:bg-destructive/90' 
+                        : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                    }`}
+                    onClick={() => {
+                      activeAlert.onAction?.();
+                      setActiveAlert(null); // auto-dismiss on action
+                    }}
+                  >
+                    {activeAlert.actionText}
+                  </Button>
+                )}
+                <button 
+                  className={`p-1 transition-colors ${
+                    activeAlert.type === 'error' ? 'text-destructive hover:text-destructive/80' : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                  onClick={() => setActiveAlert(null)}
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <Button className="rounded-full h-8 px-4 text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90">Get Plus</Button>
-              <button className="text-muted-foreground hover:text-foreground p-1 transition-colors">
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+          )}
 
           <AppChatInput onSend={sendMessage} />
         </div>
