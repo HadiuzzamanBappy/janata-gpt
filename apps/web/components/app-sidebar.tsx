@@ -15,12 +15,32 @@ import {
 } from "@repo/ui"
 import { Button } from "@repo/ui"
 
-import { LogIn, Sparkles } from "lucide-react"
+import { LogIn, Sparkles, Search } from "lucide-react"
 import { MainMenu } from "./main-menu"
 import { ChatList } from "./chat-list"
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  // Mock authentication state - set to false to see the unauthenticated view (hidden chat list + login card)
-  const isAuth = false;
+import { LoginModal } from "./login-modal"
+import { ChatSearchModal } from "./chat-search-modal"
+import { User } from "@supabase/supabase-js"
+
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  user?: User | null;
+}
+
+export function AppSidebar({ user, ...props }: AppSidebarProps) {
+  const [isLoginModalOpen, setIsLoginModalOpen] = React.useState(false);
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+  const isAuth = !!user;
+
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey) && isAuth) {
+        e.preventDefault();
+        setIsSearchOpen((open) => !open);
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, [isAuth]);
 
   return (
     <Sidebar collapsible="icon" variant="inset" {...props}>
@@ -31,12 +51,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <Sparkles className="size-5" />
               <span className="font-semibold text-base tracking-tight">Janata GPT</span>
             </SidebarMenuButton>
-            <SidebarTrigger className="group-data-[collapsible=icon]:mx-auto" />
+            <div className="flex items-center gap-0.5 group-data-[collapsible=icon]:mx-auto">
+              {isAuth && (
+                <SidebarMenuButton 
+                  tooltip="Search (Ctrl+K)" 
+                  onClick={() => setIsSearchOpen(true)}
+                  className="w-8 h-8 p-0 flex items-center justify-center group-data-[collapsible=icon]:hidden hover:bg-muted"
+                >
+                  <Search className="w-4 h-4 text-muted-foreground" />
+                </SidebarMenuButton>
+              )}
+              <SidebarTrigger />
+            </div>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <MainMenu isAuth={isAuth} />
+        <MainMenu isAuth={isAuth} onLoginClick={() => setIsLoginModalOpen(true)} />
         <ChatList isAuth={isAuth} />
       </SidebarContent>
       {!isAuth && (
@@ -48,14 +79,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 Log in to get answers based on saved chats, plus create images and upload files.
               </p>
             </div>
-            <Button variant="outline" className="w-full rounded-full font-semibold bg-background shadow-sm hover:bg-muted">
+            <Button 
+              variant="outline" 
+              className="w-full rounded-full font-semibold bg-background shadow-sm hover:bg-muted"
+              onClick={() => setIsLoginModalOpen(true)}
+            >
               Log in
             </Button>
           </div>
 
           <SidebarMenu className="hidden group-data-[collapsible=icon]:flex px-2 pb-2">
             <SidebarMenuItem>
-              <SidebarMenuButton tooltip="Log in" className="text-emerald-500 hover:text-emerald-600 hover:bg-emerald-500/10 dark:text-emerald-400 dark:hover:text-emerald-300 dark:hover:bg-emerald-400/10 transition-colors">
+              <SidebarMenuButton 
+                tooltip="Log in" 
+                className="text-emerald-500 hover:text-emerald-600 hover:bg-emerald-500/10 dark:text-emerald-400 dark:hover:text-emerald-300 dark:hover:bg-emerald-400/10 transition-colors"
+                onClick={() => setIsLoginModalOpen(true)}
+              >
                 <LogIn />
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -63,6 +102,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarFooter>
       )}
       <SidebarRail />
+      
+      <LoginModal 
+        open={isLoginModalOpen} 
+        onOpenChange={setIsLoginModalOpen} 
+      />
+      <ChatSearchModal 
+        open={isSearchOpen} 
+        onOpenChange={setIsSearchOpen} 
+      />
     </Sidebar>
   )
 }
