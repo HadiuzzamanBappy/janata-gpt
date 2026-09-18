@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@repo/ui";
+import {
+  SidebarProvider,
+  SidebarInset,
+  TooltipProvider
+} from "@repo/ui";
+import { AppSidebar } from "@/components/app-sidebar";
+import { AppTopbar } from "@/components/app-topbar";
 import "@repo/ui/globals.css";
 
 export const metadata: Metadata = {
-  title: "ChatGPT Clone",
+  title: "JanataGPT",
   description: "Advanced Agentic AI",
 };
 
@@ -16,7 +23,17 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className="dark">
       <body className="bg-background text-foreground antialiased min-h-screen">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          {children}
+          <TooltipProvider delay={0}>
+            <SidebarProvider>
+              <AppSidebar />
+              <SidebarInset>
+                <AppTopbar />
+                <div className="flex flex-1 flex-col overflow-hidden relative">
+                  {children}
+                </div>
+              </SidebarInset>
+            </SidebarProvider>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

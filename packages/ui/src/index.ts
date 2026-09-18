@@ -26,8 +26,3 @@ export * from "./components/ui/table"
 export * from "./components/ui/tabs"
 export * from "./components/ui/tooltip"
 
-// Templates
-export * from "./components/templates/dashboard-layout"
-export * from "./components/templates/auth-layout"
-export * from "./components/templates/settings-layout"
-export * from "./components/templates/empty-state"
