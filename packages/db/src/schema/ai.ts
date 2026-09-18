@@ -1,9 +1,13 @@
-import { pgTable, text, timestamp, jsonb, pgPolicy } from 'drizzle-orm/pg-core';
-import { sql, relations } from 'drizzle-orm';
+import { pgTable, text, timestamp, jsonb } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 import { users } from './auth.js';
 
 // ----------------------------------------------------------------------
 // Chats
+// NOTE: RLS policies are managed in Supabase Dashboard, not drizzle-kit push.
+// Recommended RLS policy for chats:
+//   USING (user_id = auth.uid())
+//   WITH CHECK (user_id = auth.uid())
 // ----------------------------------------------------------------------
 export const chats = pgTable('chats', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
@@ -11,18 +15,13 @@ export const chats = pgTable('chats', {
   userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().notNull(),
-}, (table) => [
-  pgPolicy('Users can manage their own chats', {
-    as: 'permissive',
-    for: 'all',
-    to: 'public',
-    using: sql`${table.userId} = auth.uid()`,
-    withCheck: sql`${table.userId} = auth.uid()`,
-  })
-]);
+});
 
 // ----------------------------------------------------------------------
 // Messages
+// NOTE: RLS policy recommendation for messages:
+//   USING (EXISTS (SELECT 1 FROM chats WHERE id = chat_id AND user_id = auth.uid()))
+//   WITH CHECK (EXISTS (SELECT 1 FROM chats WHERE id = chat_id AND user_id = auth.uid()))
 // ----------------------------------------------------------------------
 export const messages = pgTable('messages', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
@@ -31,16 +30,7 @@ export const messages = pgTable('messages', {
   content: text('content').notNull(),
   toolCalls: jsonb('tool_calls'),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
-}, (table) => [
-  // A bit more advanced: Users can only see messages if they own the parent chat
-  pgPolicy('Users can view messages of their chats', {
-    as: 'permissive',
-    for: 'all',
-    to: 'public',
-    using: sql`exists (select 1 from chats where chats.id = ${table.chatId} and chats.user_id = auth.uid())`,
-    withCheck: sql`exists (select 1 from chats where chats.id = ${table.chatId} and chats.user_id = auth.uid())`,
-  })
-]);
+});
 
 // ----------------------------------------------------------------------
 // Relations

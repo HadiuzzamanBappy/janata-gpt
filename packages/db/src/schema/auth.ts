@@ -1,8 +1,11 @@
-import { pgTable, text, timestamp, boolean, primaryKey, pgPolicy } from 'drizzle-orm/pg-core';
-import { sql, relations } from 'drizzle-orm';
+import { pgTable, text, timestamp, boolean, primaryKey } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 
 // ----------------------------------------------------------------------
 // Users
+// NOTE: RLS policies are managed directly in Supabase Dashboard or via
+// SQL migrations — not through drizzle-kit push (pgPolicy causes a known
+// drizzle-kit bug when introspecting Supabase tables).
 // ----------------------------------------------------------------------
 export const users = pgTable('users', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
@@ -13,20 +16,7 @@ export const users = pgTable('users', {
   isActive: boolean('is_active').default(true).notNull(),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().notNull(),
-}, (table) => [
-  pgPolicy('Users can view their own profile', {
-    as: 'permissive',
-    for: 'select',
-    to: 'public',
-    using: sql`${table.id} = auth.uid()`,
-  }),
-  pgPolicy('Users can update their own profile', {
-    as: 'permissive',
-    for: 'update',
-    to: 'public',
-    using: sql`${table.id} = auth.uid()`,
-  })
-]);
+});
 
 // ----------------------------------------------------------------------
 // Roles & Permissions

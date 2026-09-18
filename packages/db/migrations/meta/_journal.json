@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1789676871698,
-      "tag": "0000_flawless_alex_power",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1789677168258,
-      "tag": "0001_wide_jocasta",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1789677218200,
-      "tag": "0002_special_queen_noir",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1789677338674,
-      "tag": "0003_awesome_goblin_queen",
+      "when": 1789691509549,
+      "tag": "0000_broad_anthem",
       "breakpoints": true
     }
   ]

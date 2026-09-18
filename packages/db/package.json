@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./client": "./src/client.ts"
   },
   "scripts": {
     "check-types": "tsc --noEmit",
@@ -12,13 +13,17 @@
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "db:seed": "tsx src/seed.ts",
+    "db:reset": "tsx src/reset.ts"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@supabase/supabase-js": "^2.49.4",
     "@types/node": "^26.6.1",
     "@types/pg": "^8.23.1",
+    "dotenv": "^18.0.0",
     "drizzle-kit": "^0.31.10",
     "eslint": "10.9.1",
     "tsx": "^4.23.13",

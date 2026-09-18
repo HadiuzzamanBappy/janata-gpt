@@ -1,9 +1,11 @@
-import { pgTable, text, timestamp, jsonb, customType, pgPolicy } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, jsonb, customType } from 'drizzle-orm/pg-core';
 import { sql, relations } from 'drizzle-orm';
 import { users } from './auth.js';
 
 // ----------------------------------------------------------------------
 // Custom Types & Extensions
+// NOTE: Requires pgvector extension — already enabled in Supabase by default.
+// Run in Supabase SQL Editor if needed: CREATE EXTENSION IF NOT EXISTS vector;
 // ----------------------------------------------------------------------
 const vector = customType<{ data: number[]; driverData: string }>({
   dataType() { return 'vector(1536)'; },
@@ -13,6 +15,10 @@ const vector = customType<{ data: number[]; driverData: string }>({
 
 // ----------------------------------------------------------------------
 // Documents
+// NOTE: RLS policies are managed in Supabase Dashboard, not drizzle-kit push.
+// Recommended RLS policy for documents:
+//   USING (user_id = auth.uid())
+//   WITH CHECK (user_id = auth.uid())
 // ----------------------------------------------------------------------
 export const documents = pgTable('documents', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
@@ -20,18 +26,12 @@ export const documents = pgTable('documents', {
   userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
   updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().notNull(),
-}, (table) => [
-  pgPolicy('Users can manage their own documents', {
-    as: 'permissive',
-    for: 'all',
-    to: 'public',
-    using: sql`${table.userId} = auth.uid()`,
-    withCheck: sql`${table.userId} = auth.uid()`,
-  })
-]);
+});
 
 // ----------------------------------------------------------------------
 // Document Chunks (RAG)
+// NOTE: RLS policy recommendation for document_chunks:
+//   USING (EXISTS (SELECT 1 FROM documents WHERE id = document_id AND user_id = auth.uid()))
 // ----------------------------------------------------------------------
 export const documentChunks = pgTable('document_chunks', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
@@ -40,15 +40,7 @@ export const documentChunks = pgTable('document_chunks', {
   metadata: jsonb('metadata'),
   embedding: vector('embedding'),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
-}, (table) => [
-  pgPolicy('Users can view chunks of their documents', {
-    as: 'permissive',
-    for: 'all',
-    to: 'public',
-    using: sql`exists (select 1 from documents where documents.id = ${table.documentId} and documents.user_id = auth.uid())`,
-    withCheck: sql`exists (select 1 from documents where documents.id = ${table.documentId} and documents.user_id = auth.uid())`,
-  })
-]);
+});
 
 // ----------------------------------------------------------------------
 // Relations
@@ -63,7 +55,7 @@ export const documentChunksRelations = relations(documentChunks, ({ one }) => ({
 }));
 
 // ----------------------------------------------------------------------
-// RPC Functions (Raw SQL string to be executed)
+// RPC Function (run this once in Supabase SQL Editor)
 // ----------------------------------------------------------------------
 export const matchDocumentsRpc = sql`
 CREATE OR REPLACE FUNCTION match_documents(
