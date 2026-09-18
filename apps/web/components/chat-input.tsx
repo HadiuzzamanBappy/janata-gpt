@@ -78,7 +78,7 @@ export function AppChatInput({ onSend }: { onSend?: (text: string) => void }) {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger render={<div />}>
-            <DropdownMenuTrigger className="flex items-center justify-center p-2 text-muted-foreground hover:text-foreground hover:bg-muted-foreground/20 rounded-full transition-colors shrink-0 outline-none cursor-pointer">
+            <DropdownMenuTrigger className="flex items-center justify-center w-8 h-8 text-muted-foreground hover:text-foreground hover:bg-muted-foreground/20 rounded-full transition-colors shrink-0 outline-none cursor-pointer">
               <Plus className="w-5 h-5" />
             </DropdownMenuTrigger>
           </TooltipTrigger>

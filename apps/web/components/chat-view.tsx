@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { AppChatInput } from "@/components/app-chat-input";
-import { Sparkles } from "lucide-react";
+import { AppChatInput } from "@/components/chat-input";
+import { Sparkles, Copy, Share, Pencil, RefreshCw, MoreHorizontal } from "lucide-react";
 
 const SUGGESTIONS = [
   "What can you do?",
@@ -27,7 +27,7 @@ export function NewChatView() {
   }
 
   return (
-    <div className="flex flex-col h-full w-full items-center justify-center p-4 bg-background">
+    <div className="absolute inset-0 flex flex-col items-center justify-center p-4 bg-background">
       <div className="w-full max-w-2xl flex flex-col items-center gap-8 -mt-16">
         <div className="flex flex-col items-center gap-3">
           <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
@@ -136,7 +136,7 @@ export function ChatSessionView({
   }
 
   return (
-    <div className="flex flex-col h-full w-full bg-background">
+    <div className="absolute inset-0 flex flex-col bg-background">
 
       {/* ── MESSAGES ── */}
       <div className="flex-1 overflow-y-auto">
@@ -144,21 +144,49 @@ export function ChatSessionView({
           {messages.map((msg) => (
             <div
               key={msg.id}
-              className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+              className={`flex gap-3 group ${msg.role === "user" ? "justify-end" : "justify-start"}`}
             >
               {msg.role === "assistant" && (
                 <div className="w-8 h-8 rounded-full bg-primary/15 border border-primary/20 flex items-center justify-center shrink-0 mt-1">
                   <Sparkles className="w-4 h-4 text-primary" />
                 </div>
               )}
-              <div
-                className={`max-w-[75%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
-                  msg.role === "user"
-                    ? "bg-primary text-primary-foreground rounded-br-sm"
-                    : "bg-muted text-foreground rounded-bl-sm"
-                }`}
-              >
-                {msg.content}
+              <div className={`flex flex-col gap-1 max-w-[75%] ${msg.role === "user" ? "items-end" : "items-start"}`}>
+                <div
+                  className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+                    msg.role === "user"
+                      ? "bg-primary text-primary-foreground rounded-br-sm"
+                      : "bg-muted text-foreground rounded-bl-sm"
+                  }`}
+                >
+                  {msg.content}
+                </div>
+
+                {/* Hover CTA Actions */}
+                <div className={`flex items-center gap-1 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <button className="p-1.5 hover:bg-muted hover:text-foreground rounded-md transition-colors" title="Copy">
+                    <Copy className="size-3.5" />
+                  </button>
+                  {msg.role === "user" ? (
+                    <>
+                      <button className="p-1.5 hover:bg-muted hover:text-foreground rounded-md transition-colors" title="Share">
+                        <Share className="size-3.5" />
+                      </button>
+                      <button className="p-1.5 hover:bg-muted hover:text-foreground rounded-md transition-colors" title="Edit">
+                        <Pencil className="size-3.5" />
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button className="p-1.5 hover:bg-muted hover:text-foreground rounded-md transition-colors" title="Regenerate">
+                        <RefreshCw className="size-3.5" />
+                      </button>
+                      <button className="p-1.5 hover:bg-muted hover:text-foreground rounded-md transition-colors" title="More">
+                        <MoreHorizontal className="size-3.5" />
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           ))}
@@ -182,7 +210,7 @@ export function ChatSessionView({
       </div>
 
       {/* ── BOTTOM INPUT ── */}
-      <div className="border-t border-border/50 bg-background/80 backdrop-blur-sm px-4 py-3 shrink-0">
+      <div className="bg-background/80 backdrop-blur-sm px-4 py-3 shrink-0">
         <div className="max-w-3xl mx-auto">
           <AppChatInput onSend={sendMessage} />
         </div>

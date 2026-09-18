@@ -19,8 +19,8 @@ import { LogIn, Sparkles } from "lucide-react"
 import { MainMenu } from "./main-menu"
 import { ChatList } from "./chat-list"
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  // Mock authentication state - set to true to see the authenticated view
-  const isAuth = true;
+  // Mock authentication state - set to false to see the unauthenticated view (hidden chat list + login card)
+  const isAuth = false;
 
   return (
     <Sidebar collapsible="icon" variant="inset" {...props}>
