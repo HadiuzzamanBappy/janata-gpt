@@ -14,7 +14,13 @@ import {
   Volume2,
   ThumbsUp,
   ThumbsDown,
-  Check
+  Check,
+  Share,
+  Files,
+  Pin,
+  Archive,
+  Trash2,
+  X
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -182,10 +188,41 @@ export function ChatSessionView({
 
   return (
     <div className="absolute inset-0 flex flex-col bg-background">
+      
+      {/* ── CHAT ACTIONS (Top Right) ── */}
+      <div className="absolute top-2 right-2 z-10 flex items-center gap-1.5 pointer-events-auto">
+        <Button variant="ghost" className="rounded-full font-semibold px-4 h-9 text-muted-foreground hover:text-foreground">
+          <Share className="size-4 mr-2" />
+          Share
+        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="flex h-9 w-9 items-center justify-center rounded-full bg-muted/80 hover:bg-muted text-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <MoreHorizontal className="size-4" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56 rounded-xl shadow-lg border-border/60 p-1">
+            <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium">
+              <Files className="size-4 text-muted-foreground" />
+              View files in chat
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium">
+              <Pin className="size-4 text-muted-foreground" />
+              Pin chat
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium">
+              <Archive className="size-4 text-muted-foreground" />
+              Archive
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer gap-2.5 py-2 font-medium text-destructive focus:text-destructive focus:bg-destructive/10">
+              <Trash2 className="size-4" />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
 
       {/* ── MESSAGES ── */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="max-w-3xl mx-auto px-4 py-8 flex flex-col gap-6">
+      <div className="flex-1 overflow-y-auto w-full">
+        <div className="max-w-3xl mx-auto px-4 pt-8 pb-48 flex flex-col gap-6">
           {messages.map((msg) => (
             <div
               key={msg.id}
@@ -349,8 +386,22 @@ export function ChatSessionView({
       </div>
 
       {/* ── BOTTOM INPUT ── */}
-      <div className="bg-background/80 backdrop-blur-sm px-4 py-3 shrink-0">
-        <div className="max-w-3xl mx-auto">
+      <div className="absolute bottom-0 left-0 right-0 px-4 pb-6 pt-2 pointer-events-none bg-transparent">
+        <div className="max-w-3xl mx-auto flex flex-col gap-2 pointer-events-auto">
+          {/* Optional Alert */}
+          <div className="w-full bg-muted border border-border/50 rounded-2xl p-3 flex items-start justify-between gap-4 shadow-sm">
+            <div className="flex flex-col gap-0.5">
+              <span className="text-sm font-semibold text-foreground">Improve accuracy for technical work</span>
+              <span className="text-sm text-muted-foreground">Upgrade to Plus and use increased reasoning to debug code, work through systems, and solve math or science problems.</span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <Button className="rounded-full h-8 px-4 text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90">Get Plus</Button>
+              <button className="text-muted-foreground hover:text-foreground p-1 transition-colors">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
           <AppChatInput onSend={sendMessage} />
         </div>
       </div>

@@ -48,7 +48,7 @@ export function MainMenu({ isAuth, onLoginClick, onSearchClick }: { isAuth?: boo
 
   return (
     <SidebarGroup className="pt-2">
-      <SidebarMenu>
+      <SidebarMenu className="gap-1.5">
         {menuItems.map((item) => {
           const isActive =
             item.url === "#"

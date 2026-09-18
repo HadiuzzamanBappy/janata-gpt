@@ -16,19 +16,14 @@ import {
   SidebarTrigger,
   Avatar,
   AvatarFallback,
-  AvatarImage,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  AvatarImage
 } from "@repo/ui"
 import { Button } from "@repo/ui"
 
-import { LogIn, Sparkles, LogOut, Settings } from "lucide-react"
+import { LogIn, Sparkles, LogOut } from "lucide-react"
 import { MainMenu } from "./main-menu"
 import { ChatList } from "./chat-list"
-import { LoginModal } from "./login-modal"
+import { AuthModal } from "./auth-modal"
 import { ChatSearchModal } from "./chat-search-modal"
 import { SettingsModal } from "./settings-modal"
 import { User } from "@supabase/supabase-js"
@@ -50,7 +45,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
     await supabase.auth.signOut();
-    router.push('/login');
+    router.push('/auth/login');
     router.refresh();
   };
 
@@ -94,59 +89,43 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
         <ChatList isAuth={isAuth} />
       </SidebarContent>
       {isAuth && (
-        <SidebarFooter className="p-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger 
-              render={
-                <Button
-                  variant="ghost"
-                  className="w-full h-12 justify-start gap-2.5 px-2 rounded-lg hover:bg-muted font-medium overflow-hidden group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 outline-none"
-                />
-              }
-            >
-              <Avatar className="w-8 h-8 shrink-0 border border-border/50">
-                <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || "User"} />
-                <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
-                  {user.user_metadata?.full_name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || "U"}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col items-start overflow-hidden group-data-[collapsible=icon]:hidden">
-                <span className="text-sm font-semibold text-foreground truncate w-full">{user.user_metadata?.full_name || "User"}</span>
-                <span className="text-xs text-muted-foreground truncate w-full">{user.email}</span>
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent 
-              side="top" 
-              sideOffset={8} 
-              align="center"
-              className="w-56 rounded-xl border-border/40 shadow-xl bg-popover p-1"
-            >
-              <DropdownMenuItem 
-                onClick={() => setIsSettingsOpen(true)}
-                className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-muted"
-              >
-                <Settings className="size-4 text-muted-foreground" />
-                <span className="font-medium text-sm">Settings</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="my-1 border-border/40" />
-              <DropdownMenuItem 
-                onClick={handleSignOut}
-                className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-destructive/10 text-destructive focus:text-destructive focus:bg-destructive/10"
-              >
-                <LogOut className="size-4" />
-                <span className="font-medium text-sm">Log out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <>
+          <SidebarFooter className="p-2 flex flex-row group-data-[collapsible=icon]:flex-col-reverse gap-1 items-center">
+          <Button
+            variant="ghost"
+            className="flex-1 justify-start gap-2.5 h-12 px-2 rounded-lg hover:bg-muted font-medium overflow-hidden group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:h-10 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0"
+            onClick={() => setIsSettingsOpen(true)}
+            title="Settings"
+          >
+            <Avatar className="w-8 h-8 shrink-0 border border-border/50">
+              <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || "User"} />
+              <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
+                {user.user_metadata?.full_name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || "U"}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col items-start overflow-hidden group-data-[collapsible=icon]:hidden">
+              <span className="text-sm font-semibold text-foreground truncate w-full">{user.user_metadata?.full_name || "User"}</span>
+              <span className="text-xs text-muted-foreground truncate w-full">{user.email}</span>
+            </div>
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-12 shrink-0 h-12 p-0 rounded-lg text-muted-foreground hover:text-foreground hover:bg-destructive/10 hover:text-destructive transition-colors group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:h-10"
+            onClick={handleSignOut}
+            title="Log out"
+          >
+            <LogOut className="size-4" />
+          </Button>
         </SidebarFooter>
+        </>
       )}
       {!isAuth && (
         <SidebarFooter className="p-0">
           <div className="p-4 flex flex-col gap-4 group-data-[collapsible=icon]:hidden bg-sidebar-accent/50 border border-sidebar-border rounded-xl m-2 mt-0">
             <div className="flex flex-col gap-1.5">
-              <h3 className="font-semibold text-sm text-foreground tracking-tight">Get responses tailored to you</h3>
+              <h3 className="font-semibold text-sm text-foreground tracking-tight">Sign in</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Log in to get answers based on saved chats, plus create images and upload files.
+                Save your chat history & upload files.
               </p>
             </div>
             <Button
@@ -173,7 +152,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
       )}
       <SidebarRail />
 
-      <LoginModal
+      <AuthModal
         open={isLoginModalOpen}
         onOpenChange={setIsLoginModalOpen}
       />
@@ -185,6 +164,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
         open={isSettingsOpen}
         onOpenChange={setIsSettingsOpen}
         user={user || null}
+        onSignOut={handleSignOut}
       />
     </Sidebar>
   )
