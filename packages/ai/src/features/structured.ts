@@ -1,7 +1,7 @@
 import { generateObject, streamObject, type LanguageModel } from 'ai';
 import { z } from 'zod';
-import { getModel } from './client';
-import { defaultModels } from './registry';
+import { getModel } from '../core/client';
+import { defaultModels } from '../core/registry';
 
 /**
  * Universal Structured Data Extractor

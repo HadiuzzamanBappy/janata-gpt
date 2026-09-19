@@ -12,8 +12,6 @@ export const redis = (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_
  * Helper to generate a deterministic cache key based on model and prompt
  */
 export function generateCacheKey(modelName: string, prompt: string): string {
-  // Simple hash or base64 encode for demo purposes. 
-  // In production, use crypto.createHash('sha256')
   const base64Prompt = Buffer.from(prompt).toString('base64').slice(0, 50);
   return `ai:cache:${modelName}:${base64Prompt}`;
 }

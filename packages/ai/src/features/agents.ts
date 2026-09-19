@@ -1,7 +1,7 @@
 import { generateText, type LanguageModel } from 'ai';
-import { getModel } from './client';
-import { defaultModels } from './registry';
-import { aiTools } from './tools';
+import { getModel } from '../core/client';
+import { defaultModels } from '../core/registry';
+import { aiTools } from '../tools';
 
 /**
  * Universal Multi-Step Agent Boilerplate

@@ -1,10 +1,10 @@
 import { embed, embedMany } from "ai";
 import type { EmbeddingModel } from "ai";
-import { google } from "./providers";
+import { gemini } from "../core/providers";
 
 // In ai@7, EmbeddingModel is not generic — cast bridges provider spec-version mismatch.
 function makeEmbeddingModel(name: string): EmbeddingModel {
-  return google.textEmbeddingModel(name) as unknown as EmbeddingModel;
+  return gemini.textEmbeddingModel(name) as unknown as EmbeddingModel;
 }
 
 export const embeddingModels = {

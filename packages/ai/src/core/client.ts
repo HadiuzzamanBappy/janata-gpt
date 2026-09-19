@@ -2,7 +2,7 @@ import { type LanguageModel, streamText, convertToModelMessages, type UIMessage 
 import { type AIModelConfig, defaultModels } from "./registry";
 import { redis, generateCacheKey } from "./cache";
 import { providers } from "./providers";
-import { aiTools } from "./tools";
+import { aiTools } from "../tools";
 
 /**
  * Retrieves the specific LanguageModel from the requested provider.

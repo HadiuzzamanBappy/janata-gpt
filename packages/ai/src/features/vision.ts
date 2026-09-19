@@ -1,6 +1,6 @@
 import { generateText, type LanguageModel } from 'ai';
-import { getModel } from './client';
-import { defaultModels } from './registry';
+import { getModel } from '../core/client';
+import { defaultModels } from '../core/registry';
 
 /**
  * Universal Vision / Multimodal Helper
@@ -11,7 +11,6 @@ export async function analyzeImage(
   model: LanguageModel = getModel(defaultModels.deepseekChat)
 ): Promise<string> {
   
-  // Format the image url correctly if it's a string
   const image = typeof imageUrl === 'string' && imageUrl.startsWith('http') 
     ? new URL(imageUrl) 
     : imageUrl;
