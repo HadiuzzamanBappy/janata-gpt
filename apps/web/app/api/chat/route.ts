@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { createSupabaseServerClient } from '@repo/auth/server';
-import { streamChatResponse, getModel, defaultModels } from '@repo/ai';
+import { streamChatResponse } from '@repo/ai';
 import { NextResponse } from 'next/server';
 import type { UIMessage } from 'ai';
 
@@ -64,14 +64,13 @@ export async function POST(req: Request) {
       }
     }
 
-    // 3. Trigger the AI Stream (Powered by DeepSeek)
-    return await streamChatResponse(
-      messages,
-      "You are Janata GPT powered by DeepSeek. Think creatively and assist the user with maximum effort.",
-      getModel(defaultModels.deepseekChat),
+    // 3. Trigger the AI Stream (Powered by DeepSeek via 'fast' mode)
+    return await streamChatResponse(messages, {
+      mode: 'fast',
+      systemPrompt: "You are Janata GPT powered by DeepSeek. Think creatively and assist the user with maximum effort.",
       
       // 4. Background Database Saving (Triggers silently when AI finishes)
-      async ({ text, toolCalls }) => {
+      onFinish: async ({ text, toolCalls }) => {
         if (!sessionId) return; // Skip saving if no session provided
 
         // Wait for the stream to completely finish, then save AI response
@@ -87,8 +86,8 @@ export async function POST(req: Request) {
         if (aiDbError) {
           console.error('Failed to save AI message:', aiDbError);
         }
-      }
-    );
+      },
+    });
 
   } catch (error) {
     console.error('Chat API Error:', error);

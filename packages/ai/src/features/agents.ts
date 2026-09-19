@@ -1,6 +1,6 @@
 import { generateText, type LanguageModel } from 'ai';
 import { getModel } from '../core/client';
-import { defaultModels } from '../core/registry';
+import { FEATURE_ROUTES } from '../core/registry';
 import { aiTools } from '../tools';
 
 /**
@@ -9,7 +9,7 @@ import { aiTools } from '../tools';
  */
 export async function runAgentLoop(
   prompt: string,
-  model: LanguageModel = getModel(defaultModels.openRouterAuto)
+  model: LanguageModel = getModel(FEATURE_ROUTES.agent)
 ): Promise<string> {
   const result = await generateText({
     model,

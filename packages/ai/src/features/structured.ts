@@ -1,7 +1,7 @@
 import { generateObject, streamObject, type LanguageModel } from 'ai';
 import { z } from 'zod';
 import { getModel } from '../core/client';
-import { defaultModels } from '../core/registry';
+import { FEATURE_ROUTES } from '../core/registry';
 
 /**
  * Universal Structured Data Extractor
@@ -10,7 +10,7 @@ import { defaultModels } from '../core/registry';
 export async function extractStructuredData<T>(
   prompt: string,
   schema: z.ZodSchema<T>,
-  model: LanguageModel = getModel(defaultModels.geminiFlash)
+  model: LanguageModel = getModel(FEATURE_ROUTES.structured)
 ): Promise<T> {
   const { object } = await generateObject({
     model,
@@ -27,7 +27,7 @@ export async function extractStructuredData<T>(
 export async function streamStructuredData<T>(
   prompt: string,
   schema: z.ZodSchema<T>,
-  model: LanguageModel = getModel(defaultModels.geminiFlash)
+  model: LanguageModel = getModel(FEATURE_ROUTES.structured)
 ) {
   const { partialObjectStream } = await streamObject({
     model,

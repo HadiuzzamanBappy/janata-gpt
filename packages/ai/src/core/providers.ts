@@ -28,7 +28,7 @@ export const deepseek = createOpenAI({
  * 4. Z.AI Provider (ZAI_API_KEY)
  */
 export const zai = createOpenAI({
-  baseURL: 'https://api.zai.com/v1',
+  baseURL: 'https://api.z.ai/api/coding/paas/v4',
   apiKey: process.env.ZAI_API_KEY || '',
 });
 

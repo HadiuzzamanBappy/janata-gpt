@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { extractStructuredData, getModel, defaultModels } from '../src/index';
+import { extractStructuredData } from '../src/index';
 import { z } from 'zod';
 
 describe('@repo/ai Structured Output', () => {
@@ -11,8 +11,7 @@ describe('@repo/ai Structured Output', () => {
 
     const result = await extractStructuredData(
       'Extract: Alice is 30 years old',
-      PersonSchema,
-      getModel(defaultModels.geminiFlash)
+      PersonSchema
     );
 
     expect(result).toHaveProperty('name');

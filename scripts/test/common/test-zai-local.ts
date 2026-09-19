@@ -39,7 +39,7 @@ function loadEnv(): Record<string, string> {
 const env = loadEnv();
 
 const ZAI_API_KEY = env.ZAI_API_KEY;
-const ZAI_MODEL = env.ZAI_MODEL || 'glm-4.7';
+const ZAI_MODEL = env.ZAI_MODEL || 'glm-5.3';
 
 if (!ZAI_API_KEY) {
   console.error('❌ ZAI_API_KEY not found in .env file');

@@ -1,12 +1,10 @@
-import { type LanguageModel, streamText, convertToModelMessages, type UIMessage } from "ai";
-import { type AIModelConfig, defaultModels, FEATURE_ROUTES, type ChatMode } from "./registry";
+import { type LanguageModel } from "ai";
+import { type AIModelConfig } from "./registry";
 import { redis, generateCacheKey } from "./cache";
 import { providers } from "./providers";
-import { aiTools } from "../tools";
 
 /**
- * Retrieves the specific LanguageModel from the requested provider.
- * Uses .chat() for OpenAI-compatible providers to enforce standard /v1/chat/completions endpoints.
+ * Low-level engine helper: Retrieves a LanguageModel instance for any provider config.
  */
 export function getModel(config: AIModelConfig): LanguageModel {
   const providerInstance = providers[config.provider];
@@ -15,7 +13,7 @@ export function getModel(config: AIModelConfig): LanguageModel {
     throw new Error(`Unsupported AI provider: ${config.provider}`);
   }
 
-  // For OpenAI-compatible endpoints (DeepSeek, OpenRouter, ZAI, etc.), .chat() uses /chat/completions
+  // Force OpenAI-compatible providers to use standard /v1/chat/completions endpoint
   if ('chat' in providerInstance && typeof (providerInstance as { chat?: unknown }).chat === 'function') {
     return (providerInstance as { chat: (model: string) => LanguageModel }).chat(config.model);
   }
@@ -24,7 +22,7 @@ export function getModel(config: AIModelConfig): LanguageModel {
 }
 
 /**
- * A simple helper to check Redis before running an expensive AI call.
+ * Cache check helper (Upstash Redis)
  */
 export async function getCachedAIResponse(modelName: string, prompt: string): Promise<string | null> {
   if (!redis) return null;
@@ -33,59 +31,10 @@ export async function getCachedAIResponse(modelName: string, prompt: string): Pr
 }
 
 /**
- * A simple helper to cache the response of an AI call.
+ * Cache store helper (Upstash Redis)
  */
 export async function setCachedAIResponse(modelName: string, prompt: string, response: string): Promise<void> {
   if (!redis) return;
   const key = generateCacheKey(modelName, prompt);
-  // Cache for 24 hours
   await redis.set(key, response, { ex: 60 * 60 * 24 });
-}
-
-/**
- * Universal Intent-Based Chat Streamer
- * Automatically routes frontend chat modes ('fast', 'reasoning', 'coder', 'creative', 'fallback')
- * to the cheapest & most optimal provider route.
- */
-export async function streamChatByMode(
-  messages: UIMessage[],
-  mode: ChatMode = 'fast',
-  systemPrompt?: string,
-  onFinish?: Parameters<typeof streamText>[0]["onFinish"]
-): Promise<Response> {
-  const routeMap: Record<ChatMode, AIModelConfig> = {
-    fast: FEATURE_ROUTES.chatFast || defaultModels.deepseekChat,
-    reasoning: FEATURE_ROUTES.chatReasoning || defaultModels.deepseekReasoner,
-    coder: FEATURE_ROUTES.chatCoding || defaultModels.deepseekCoder,
-    creative: FEATURE_ROUTES.chatCreative || defaultModels.zaiGlm,
-    fallback: FEATURE_ROUTES.chatFallback || defaultModels.openRouterAuto,
-  };
-
-  const selectedRoute = routeMap[mode] || FEATURE_ROUTES.chatFast;
-  const model = getModel(selectedRoute);
-  return await streamChatResponse(messages, systemPrompt, model, onFinish);
-}
-
-/**
- * Universal Chat Streamer.
- * Converts UI messages to Model messages and streams responses to the frontend.
- * Defaults to DeepSeek model (`deepseek-chat`).
- */
-export async function streamChatResponse(
-  messages: UIMessage[],
-  systemPrompt?: string,
-  model: LanguageModel = getModel(defaultModels.deepseekChat),
-  onFinish?: Parameters<typeof streamText>[0]["onFinish"]
-): Promise<Response> {
-  const modelMessages = await convertToModelMessages(messages);
-
-  const result = streamText({
-    model,
-    messages: modelMessages,
-    system: systemPrompt,
-    tools: aiTools,
-    onFinish,
-  });
-
-  return result.toUIMessageStreamResponse();
 }
