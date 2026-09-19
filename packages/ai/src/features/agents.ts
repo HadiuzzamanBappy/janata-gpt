@@ -9,7 +9,7 @@ import { aiTools } from '../tools';
  */
 export async function runAgentLoop(
   prompt: string,
-  model: LanguageModel = getModel(defaultModels.deepseekChat)
+  model: LanguageModel = getModel(defaultModels.openRouterAuto)
 ): Promise<string> {
   const result = await generateText({
     model,

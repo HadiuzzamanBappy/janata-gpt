@@ -7,8 +7,25 @@ export interface AIModelConfig {
   model: string;
 }
 
+export type ChatMode = 'fast' | 'reasoning' | 'coder' | 'creative' | 'fallback';
+
 /**
- * Pre-configured model presets for the 4 active AI providers:
+ * Smart Cost-Optimized Feature Routes:
+ * Automatically maps user intents to the cheapest, highest-performing provider.
+ */
+export const FEATURE_ROUTES: Record<string, AIModelConfig> = {
+  chatFast: { provider: 'deepseek', model: 'deepseek-chat' },       // DeepSeek $0.14/1M
+  chatReasoning: { provider: 'deepseek', model: 'deepseek-reasoner' },// DeepSeek Reasoner
+  chatCoding: { provider: 'deepseek', model: 'deepseek-coder' },   // DeepSeek Coder
+  chatCreative: { provider: 'zai', model: 'glm-5' },               // Z.AI GLM-5
+  chatFallback: { provider: 'openrouter', model: 'auto' },          // OpenRouter Auto
+  embedding: { provider: 'gemini', model: 'gemini-embedding-2' },   // Gemini Free
+  vision: { provider: 'gemini', model: 'gemini-2.5-flash' },        // Gemini Flash
+  structured: { provider: 'gemini', model: 'gemini-2.5-flash' },    // Gemini Flash
+} as const;
+
+/**
+ * Pre-configured model presets for explicit provider calls:
  * 1. DeepSeek (DEEPSEEK_API_KEY)
  * 2. OpenRouter (OPENROUTER_API_KEY)
  * 3. Gemini (GEMINI_API_KEY)

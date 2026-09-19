@@ -8,7 +8,7 @@ import { defaultModels } from '../core/registry';
 export async function analyzeImage(
   instruction: string,
   imageUrl: URL | string | Uint8Array | Buffer,
-  model: LanguageModel = getModel(defaultModels.deepseekChat)
+  model: LanguageModel = getModel(defaultModels.geminiFlash)
 ): Promise<string> {
   
   const image = typeof imageUrl === 'string' && imageUrl.startsWith('http') 

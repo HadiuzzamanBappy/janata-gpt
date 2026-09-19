@@ -10,7 +10,7 @@ import { defaultModels } from '../core/registry';
 export async function extractStructuredData<T>(
   prompt: string,
   schema: z.ZodSchema<T>,
-  model: LanguageModel = getModel(defaultModels.deepseekChat)
+  model: LanguageModel = getModel(defaultModels.geminiFlash)
 ): Promise<T> {
   const { object } = await generateObject({
     model,
@@ -27,7 +27,7 @@ export async function extractStructuredData<T>(
 export async function streamStructuredData<T>(
   prompt: string,
   schema: z.ZodSchema<T>,
-  model: LanguageModel = getModel(defaultModels.deepseekChat)
+  model: LanguageModel = getModel(defaultModels.geminiFlash)
 ) {
   const { partialObjectStream } = await streamObject({
     model,

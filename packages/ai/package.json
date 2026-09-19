@@ -7,6 +7,8 @@
     ".": "./src/index.ts"
   },
   "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
     "check-types": "tsc --noEmit",
     "lint": "eslint . --max-warnings 0"
   },
@@ -15,7 +17,8 @@
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^26.6.1",
     "eslint": "10.9.1",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vitest": "^5.0.1"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.56",

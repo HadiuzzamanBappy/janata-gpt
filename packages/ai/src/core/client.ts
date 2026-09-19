@@ -1,5 +1,5 @@
 import { type LanguageModel, streamText, convertToModelMessages, type UIMessage } from "ai";
-import { type AIModelConfig, defaultModels } from "./registry";
+import { type AIModelConfig, defaultModels, FEATURE_ROUTES, type ChatMode } from "./registry";
 import { redis, generateCacheKey } from "./cache";
 import { providers } from "./providers";
 import { aiTools } from "../tools";
@@ -40,6 +40,30 @@ export async function setCachedAIResponse(modelName: string, prompt: string, res
   const key = generateCacheKey(modelName, prompt);
   // Cache for 24 hours
   await redis.set(key, response, { ex: 60 * 60 * 24 });
+}
+
+/**
+ * Universal Intent-Based Chat Streamer
+ * Automatically routes frontend chat modes ('fast', 'reasoning', 'coder', 'creative', 'fallback')
+ * to the cheapest & most optimal provider route.
+ */
+export async function streamChatByMode(
+  messages: UIMessage[],
+  mode: ChatMode = 'fast',
+  systemPrompt?: string,
+  onFinish?: Parameters<typeof streamText>[0]["onFinish"]
+): Promise<Response> {
+  const routeMap: Record<ChatMode, AIModelConfig> = {
+    fast: FEATURE_ROUTES.chatFast || defaultModels.deepseekChat,
+    reasoning: FEATURE_ROUTES.chatReasoning || defaultModels.deepseekReasoner,
+    coder: FEATURE_ROUTES.chatCoding || defaultModels.deepseekCoder,
+    creative: FEATURE_ROUTES.chatCreative || defaultModels.zaiGlm,
+    fallback: FEATURE_ROUTES.chatFallback || defaultModels.openRouterAuto,
+  };
+
+  const selectedRoute = routeMap[mode] || FEATURE_ROUTES.chatFast;
+  const model = getModel(selectedRoute);
+  return await streamChatResponse(messages, systemPrompt, model, onFinish);
 }
 
 /**
