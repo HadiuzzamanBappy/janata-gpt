@@ -15,6 +15,8 @@ export async function extractStructuredData<T>(
   const { object } = await generateObject({
     model,
     schema,
+    mode: 'json',
+    system: 'You are a strict JSON data extractor. Output ONLY valid JSON matching the schema with no extra conversational text, markdown formatting, or explanations.',
     prompt,
   });
   return object as T;
@@ -32,6 +34,8 @@ export async function streamStructuredData<T>(
   const { partialObjectStream } = await streamObject({
     model,
     schema,
+    mode: 'json',
+    system: 'You are a strict JSON data extractor. Output ONLY valid JSON matching the schema with no extra conversational text, markdown formatting, or explanations.',
     prompt,
   });
   return partialObjectStream;
