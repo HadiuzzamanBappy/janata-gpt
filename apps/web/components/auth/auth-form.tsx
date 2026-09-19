@@ -24,10 +24,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   const handleGoogleLogin = async () => {
     setIsLoading(true);
     setErrorMsg("");
-    const supabase = createSupabaseBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    const supabase = createSupabaseBrowserClient();
     
     const redirectUrl = `${window.location.origin}/api/auth/callback`;
 
@@ -50,10 +47,7 @@ export function AuthForm({ mode }: AuthFormProps) {
     setErrorMsg("");
     setSuccessMsg("");
 
-    const supabase = createSupabaseBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    const supabase = createSupabaseBrowserClient();
 
     if (currentMode === "register") {
       const { error } = await supabase.auth.signUp({

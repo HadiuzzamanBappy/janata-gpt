@@ -1,65 +1,49 @@
-# `@repo/ai` - Universal AI SDK
+# `@repo/ai` - Feature-Based Monorepo AI SDK
 
-A robust, enterprise-grade AI boilerplate built on top of the **Vercel AI SDK**. This package acts as the central intelligence layer for your entire monorepo. It abstracts away specific AI providers (OpenAI, Anthropic, Mistral, Google, etc.) behind a unified, capability-based interface.
-
-## 🚀 Features
-
-- **Provider Agnostic**: Switch from Claude to Gemini in one line of code without touching your frontend.
-- **Upstash Redis Caching**: Built-in caching to save money on duplicate queries.
-- **Zod Tooling**: Type-safe function calling for autonomous AI agents.
-- **Structured Data**: Force the AI to output strictly typed JSON objects.
-- **Embeddings**: Ready-to-use helpers for RAG and semantic vector search.
+A modular, enterprise-grade AI package built on top of the **Vercel AI SDK (ai@7)**. This package serves as the central intelligence engine for the monorepo, providing cost-optimized, feature-driven routing across **Gemini**, **DeepSeek**, **Z.AI**, and **OpenRouter**.
 
 ---
 
-## 🛠️ Configuration
+## 🚀 Key Features & Highlights
 
-Before using the package, ensure your `.env` file at the root of the monorepo contains your API keys:
+- 🎯 **Feature-Based Routing**: Zero hardcoded model strings in app code. Features automatically route to their cost-optimized provider via `FEATURE_ROUTES`.
+- 💰 **Cost-Optimized Vector Embeddings**: Uses Google Gemini `gemini-embedding-2` for 100% free 3072-dimension RAG embeddings.
+- ⚡ **Ultra-Fast & Cheap Chat**: Default chat powered by DeepSeek (`deepseek-chat` @ $0.14 / 1M tokens).
+- 🧬 **Type-Safe JSON Extraction**: Extract structured data matching Zod schemas using Z.AI (`glm-5.3`).
+- 🤖 **Autonomous Tool Loops**: Multi-step agent execution powered by DeepSeek + Zod schema tools (`aiTools`).
+- ⚡ **Upstash Redis Caching**: Built-in caching helpers to eliminate duplicate API requests.
+
+---
+
+## 🛠️ Environment Configuration
+
+Ensure your monorepo root `.env` file contains keys for the 4 active providers:
 
 ```bash
-# Required for Vercel AI SDK standard connections
-OPENAI_API_KEY="sk-..."
-ANTHROPIC_API_KEY="sk-..."
-GEMINI_API_KEY="AIza..."
+# 1. Google Gemini (Embeddings - $0.00 Cost)
+GEMINI_API_KEY="AIzaSy..."
 
-# Custom OpenAI-compatible providers
-OPENROUTER_API_KEY="sk-or-..."
-DEEPSEEK_API_KEY="sk-..."
+# 2. DeepSeek Direct API (Fast Chat & Reasoning)
+DEEPSEEK_API_KEY="sk-f96f..."
 
-# Redis Caching
+# 3. Z.AI Coding PAAS API (Structured Data & Creative)
+ZAI_API_KEY="482781699..."
+
+# 4. OpenRouter Gateway (Fallback)
+OPENROUTER_API_KEY="sk-or-v1-..."
+
+# Optional: Upstash Redis Caching
 UPSTASH_REDIS_REST_URL="https://..."
 UPSTASH_REDIS_REST_TOKEN="..."
 ```
 
 ---
 
-## 📖 Usage Manual
+## 📖 Feature Usage Guide
 
-### 1. Basic Chat & Text Generation
-Always use the `getModel()` helper. You can pass any provider and model combination!
+### 1. Real-Time Chat Streaming (Next.js API Routes)
 
-```typescript
-import { generateText } from 'ai';
-import { getModel, defaultModels } from '@repo/ai';
-
-export async function askQuestion(prompt: string) {
-  // You can use a predefined model...
-  const model = getModel(defaultModels.claude); 
-  
-  // OR pass your own dynamically:
-  // const model = getModel({ provider: 'deepseek', model: 'deepseek-coder' });
-
-  const { text } = await generateText({
-    model,
-    prompt,
-  });
-
-  return text;
-}
-```
-
-### 2. Next.js API Streaming (The Chat Endpoint)
-Plugging `@repo/ai` into your Next.js `/api/chat/route.ts` is exactly 1 line of code thanks to the built-in `streamChatResponse` helper. It automatically intercepts tools, handles looping, and formats the stream.
+Stream AI chat responses directly to your UI using `streamChatResponse`.
 
 ```typescript
 // apps/web/app/api/chat/route.ts
@@ -67,117 +51,127 @@ import { streamChatResponse } from '@repo/ai';
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
-  
-  return streamChatResponse(
-    messages,
-    "You are a helpful assistant.", // System prompt
-    // getModel(defaultModels.claude) // Optional: override model
-  );
-}
-```
 
-### 3. Caching (Save API Costs)
-Before doing a heavy AI generation, check if the exact same question was asked recently.
-
-```typescript
-import { getModel, defaultModels, getCachedAIResponse, setCachedAIResponse } from '@repo/ai';
-import { generateText } from 'ai';
-
-export async function getAnswerCached(prompt: string) {
-  const modelConfig = defaultModels.geminiFlash;
-  const cacheKeyStr = `${modelConfig.provider}:${modelConfig.model}`;
-  
-  // 1. Check Redis Cache
-  const cached = await getCachedAIResponse(cacheKeyStr, prompt);
-  if (cached) return cached;
-
-  // 2. Generate if not found
-  const { text } = await generateText({
-    model: getModel(modelConfig),
-    prompt,
+  return await streamChatResponse(messages, {
+    mode: 'fast', // Uses DeepSeek ($0.14/1M) automatically
+    systemPrompt: 'You are a helpful assistant.',
+    onFinish: async ({ text }) => {
+      // Save AI response to DB silently when stream completes
+    },
   });
-
-  // 3. Save to Redis
-  await setCachedAIResponse(cacheKeyStr, prompt, text);
-
-  return text;
-}
-```
-
-### 3. Structured Data Extraction (JSON)
-Force the AI to output data that perfectly matches a Zod schema. Perfect for extracting data from unstructured text or receipts.
-
-```typescript
-import { extractStructuredData, defaultModels } from '@repo/ai';
-import { z } from 'zod';
-
-const userSchema = z.object({
-  name: z.string(),
-  age: z.number(),
-  hobbies: z.array(z.string()),
-});
-
-export async function parseUserProfile(bio: string) {
-  // Returns a strictly typed object, bypassing raw text!
-  const user = await extractStructuredData(
-    bio,
-    userSchema, 
-    getModel(defaultModels.claude)
-  );
-  
-  console.log(user.name); // Type-safe!
-}
-```
-
-### 4. Autonomous Agents & Tools
-Allow the AI to execute code or fetch real-world data before answering.
-
-```typescript
-import { runAgentLoop } from '@repo/ai';
-
-export async function solveMathAndWeather() {
-  // The AI will automatically use the `calculator` and `getWeather` tools 
-  // behind the scenes to arrive at this answer!
-  const answer = await runAgentLoop(
-    "What is the weather in Tokyo, and multiply the temperature by 5?"
-  );
-  
-  return answer;
-}
-```
-
-### 5. Multimodal / Vision (Image Reading)
-Pass images to models like Claude 3.5 Sonnet or GPT-4o to analyze receipts, documents, or screenshots.
-
-```typescript
-import { analyzeImage, defaultModels } from '@repo/ai';
-
-export async function readReceipt(imageUrl: string) {
-  const analysis = await analyzeImage(
-    "Extract all the line items and the total price from this receipt.",
-    imageUrl,
-    // By default it uses Claude, but you can explicitly pass GPT-4o!
-    // getModel(defaultModels.gpt4o) 
-  );
-  
-  console.log(analysis);
-}
-```
-
-### 6. Vector Embeddings (RAG)
-Convert text into numbers for semantic search in databases like Supabase `pgvector`.
-
-```typescript
-import { generateTextEmbedding } from '@repo/ai';
-
-export async function saveDocument(content: string) {
-  const vector = await generateTextEmbedding(content);
-  
-  // Save `content` and `vector` to your database...
 }
 ```
 
 ---
 
-## 🏗️ Adding New Providers
-If you want to add a new provider (like Groq or local LLMs via Ollama), you **only** need to edit `packages/ai/src/registry.ts` and `packages/ai/src/providers.ts`. Your frontend apps will instantly benefit from the new models without any code changes!
+### 2. Vector Embeddings (RAG / Semantic Search)
+
+Generate 3072-dimension embeddings for single strings or batch arrays.
+
+```typescript
+import { generateVector, generateBatchVectors } from '@repo/ai';
+
+// Single embedding ($0.00 Gemini)
+const vector = await generateVector('Semantic search query');
+
+// Batch embeddings ($0.00 Gemini)
+const vectors = await generateBatchVectors(['First document', 'Second document']);
+```
+
+---
+
+### 3. Type-Safe Structured Data Extraction (JSON)
+
+Force the AI to parse unstructured text into a strictly typed Zod schema.
+
+```typescript
+import { extractStructuredData, z } from '@repo/ai';
+
+const UserSchema = z.object({
+  name: z.string(),
+  age: z.number(),
+  role: z.string(),
+});
+
+export async function parseUserBio(bioText: string) {
+  const user = await extractStructuredData(
+    'Extract: John Doe is a 30 year old Software Engineer',
+    UserSchema
+  );
+
+  console.log(user.name); // 'John Doe' (Type-Safe!)
+}
+```
+
+---
+
+### 4. Autonomous Agent Loop with Tools
+
+Run multi-step reasoning loops where the AI executes tools before returning a final response.
+
+```typescript
+import { runAgentLoop } from '@repo/ai';
+
+export async function calculateAndCheckWeather() {
+  const answer = await runAgentLoop(
+    'What is 45 * 12 + 89 and what is the weather in San Francisco?'
+  );
+
+  return answer;
+}
+```
+
+---
+
+### 5. Upstash Redis Response Caching
+
+Cache expensive AI prompts in Redis to save API costs.
+
+```typescript
+import { getCachedAIResponse, setCachedAIResponse } from '@repo/ai';
+
+export async function getCachedResponse(modelName: string, prompt: string) {
+  // Check cache
+  const cached = await getCachedAIResponse(modelName, prompt);
+  if (cached) return cached;
+
+  // Save to cache after generating...
+  await setCachedAIResponse(modelName, prompt, newResponse);
+}
+```
+
+---
+
+## 🏛️ Architecture & Registry Mapping
+
+Feature routing is controlled centrally in `packages/ai/src/core/registry.ts`:
+
+```typescript
+export const FEATURE_ROUTES = {
+  // Chat Modes (DeepSeek & Z.AI)
+  fast:      { provider: 'deepseek',   model: 'deepseek-chat' },
+  reasoning: { provider: 'deepseek',   model: 'deepseek-reasoner' },
+  coder:     { provider: 'deepseek',   model: 'deepseek-coder' },
+  creative:  { provider: 'zai',        model: 'glm-5.3' },
+  fallback:  { provider: 'openrouter', model: 'auto' },
+
+  // Vector Embeddings (Gemini $0.00 Cost)
+  embedding: { provider: 'gemini',     model: 'gemini-embedding-2' },
+
+  // Structured Data (Z.AI PAAS API)
+  structured: { provider: 'zai',       model: 'glm-5.3' },
+
+  // Autonomous Agents (DeepSeek Chat)
+  agent:      { provider: 'deepseek',  model: 'deepseek-chat' },
+} satisfies Record<string, AIModelConfig>;
+```
+
+---
+
+## 🧪 Testing
+
+Run automated Vitest test suites across all AI features:
+
+```bash
+pnpm --filter @repo/ai test
+```

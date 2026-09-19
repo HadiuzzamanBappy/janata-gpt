@@ -17,20 +17,19 @@ type ResponseLike = {
 };
 
 /**
- * Call this inside your middleware to keep Supabase sessions alive by
- * refreshing the auth token on every request.
+ * Creates a Supabase client for Next.js Middleware.
+ * Refreshes auth tokens on every request to keep sessions alive.
  *
- * Usage in apps/web/middleware.ts:
+ * Usage in middleware.ts:
  *   import { NextResponse, type NextRequest } from 'next/server';
  *   import { createMiddlewareClient } from '@repo/auth/middleware';
  *
  *   export async function middleware(request: NextRequest) {
  *     const response = NextResponse.next({ request });
  *     const supabase = createMiddlewareClient(request, response);
- *     await supabase.auth.getUser(); // refreshes session
+ *     await supabase.auth.getUser();
  *     return response;
  *   }
- *   export const config = { matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'] };
  */
 export function createMiddlewareClient(request: RequestLike, response: ResponseLike) {
   return createServerClient(

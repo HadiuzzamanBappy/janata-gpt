@@ -23,11 +23,7 @@ export function UserMenu({ user }: UserMenuProps) {
   const router = useRouter();
 
   const handleSignOut = async () => {
-    // We can use process.env here directly since this is a Client Component in apps/web
-    const supabase = createSupabaseBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    const supabase = createSupabaseBrowserClient();
     await supabase.auth.signOut();
     router.push('/login');
     router.refresh(); // Still refresh to ensure server components clear their state

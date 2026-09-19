@@ -1,17 +1,13 @@
 /**
- * @repo/auth — Barrel export
- *
- * Consumers should import from the specific sub-paths:
- *   - Server components / Route handlers → '@repo/auth/server'
- *   - Middleware                          → '@repo/auth/middleware'
- *   - Shared types                        → '@repo/auth' (this file)
+ * @repo/auth — Universal Supabase Authentication SDK
  */
-export type { User, Session } from '@supabase/supabase-js';
 
-/**
- * Supabase user roles stored in app_metadata (set server-side only).
- * Used to gate access via RLS and server-side guards.
- */
+export type { User, Session, AuthError } from '@supabase/supabase-js';
+
+export * from './client';
+export * from './server';
+export * from './middleware';
+
 export type AppRole = 'admin' | 'user' | 'moderator';
 
 export type AuthUser = {

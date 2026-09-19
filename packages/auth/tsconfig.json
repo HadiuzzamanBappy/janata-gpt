@@ -1,9 +1,12 @@
 {
   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true
   },
   "include": [
-    "src"
+    "src/**/*",
+    "eslint.config.mjs"
   ]
 }
