@@ -8,8 +8,8 @@ function makeEmbeddingModel(name: string): EmbeddingModel {
 }
 
 export const embeddingModels = {
-  small: makeEmbeddingModel("text-embedding-004"),
-  large: makeEmbeddingModel("text-embedding-004"),
+  small: makeEmbeddingModel("gemini-embedding-2"),
+  large: makeEmbeddingModel("gemini-embedding-2"),
 };
 
 /**
