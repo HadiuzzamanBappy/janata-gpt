@@ -1,70 +1,63 @@
-# Monorepo AI Agent Guidelines (`AGENTS.md`)
+# Enterprise Monorepo AI Agent Operating System (`AGENTS.md`)
 
-Welcome to the **Turbo Monorepo** project. As an AI coding agent operating in this codebase, you must follow the strict operational rules, architecture patterns, and UI guidelines defined in this document and the accompanying rules in `.agents/rules/`.
-
----
-
-## 1. Core Operating Principles
-
-1. **Package Manager Lock**: Use `pnpm` exclusively. Never run `npm` or `yarn`. Use `pnpm workspace:*` syntax for internal workspace dependencies.
-2. **Never Duplicate Code across Apps**:
-   - UI Primitives & Design Components belong in `packages/ui`.
-   - Shared Types belong in `packages/types`.
-   - Shared Utilities belong in `packages/utils`.
-   - Environment Variable schemas belong in `packages/env`.
-   - Authentication logic belongs in `packages/auth`.
-   - AI / LLM wrappers belong in `packages/ai`.
-3. **Strict Verification Gate**: Before completing any task, run `pnpm dev` check or `pnpm turbo run build lint check-types` to ensure zero regressions across all apps (`apps/web`, `apps/admin`, etc.).
-4. **Zero Ad-hoc Hacks**: Maintain strict UI consistency by using theme tokens from `packages/ui` / Tailwind configuration. Do not hardcode magic numbers, random colors, or inline inline style hacks.
+Welcome to the **Turbo Monorepo** project. As an AI coding agent operating in this codebase, you MUST strictly adhere to the architecture, rules, governance, workflows, technology standards, templates, and checklists defined in `.agents/`.
 
 ---
 
-## 2. Monorepo Layout Map
+## 1. Master System Index
 
 ```text
-turbo-monorepo-template/
-├── .agents/                    # Agent instructions, rules & skills
-│   ├── AGENTS.md              # Master workspace guide (this file)
-│   ├── rules/                 # Always-on domain & framework rules (01-06)
-│   └── skills/                # Task-specific step-by-step runbooks
-├── apps/
-│   ├── web/                   # Next.js 16 (App Router, RSC, Supabase, AI SDK)
-│   └── admin/                 # Astro 7 (SSG / React Islands)
-├── packages/
-│   ├── ai/                    # Shared AI SDK configuration & hooks
-│   ├── auth/                  # Supabase authentication helpers & middleware
-│   ├── env/                   # Type-safe environment variable validation (t3-env/zod)
-│   ├── eslint-config/         # Shared ESLint configurations
-│   ├── types/                 # Shared TypeScript interfaces & DB schemas
-│   ├── typescript-config/     # Standardized tsconfig presets
-│   ├── ui/                    # Design system components, Radix primitives, Tailwind
-│   └── utils/                 # General helper functions & formatters
-├── pnpm-workspace.yaml        # PNPM workspace definition
-└── turbo.json                 # Turborepo task graph & caching configuration
+.agents/
+├── AGENTS.md                          # Master Operating System Guide (this file)
+│
+├── governance/                        # SYSTEM BOUNDARIES & CHANGE POLICIES
+│   ├── architecture.md                # Layer map, dependency flow, package directionality
+│   ├── boundaries.md                  # Non-negotiable app vs package responsibilities
+│   ├── change-policy.md               # Refactoring, deprecation, and versioning rules
+│   └── definition-of-done.md          # Strict completion gate & verification standards
+│
+├── rules/                             # DOMAIN CONSTRAINTS & STANDARDS
+│   ├── core.md                        # Zero bloat, DRY principles, minimal code
+│   ├── monorepo.md                    # PNPM workspace, Turbo task graph, package directionality
+│   ├── coding-standards.md            # Clean code, TypeScript strictness, empirical debugging
+│   ├── security-and-auth.md           # Supabase SSR cookie auth, session refresh, RBAC & RLS
+│   ├── environment.md                 # @repo/env schema validation & type safety
+│   ├── database.md                    # Supabase Postgres, migration & typegen rules
+│   ├── api.md                         # Next.js Route Handlers & AI SDK streaming formats
+│   ├── ui-and-a11y.md                 # Design tokens, CVA styling, Radix primitives & WCAG AA
+│   ├── testing.md                     # Vitest, component testing, mock guidelines
+│   └── performance.md                 # SSR hydration safety, Astro islands, bundle size
+│
+├── workflows/                         # STEP-BY-STEP OPERATIONAL RUNBOOKS
+│   ├── scaffold-app/SKILL.md          # Application onboarding runbook
+│   ├── create-package/SKILL.md        # Shared workspace package creation runbook
+│   ├── create-feature/SKILL.md        # Full-stack feature implementation runbook
+│   ├── create-api/SKILL.md            # API endpoint & AI stream creation runbook
+│   ├── create-ui/SKILL.md             # Shared UI components, pages & forms runbook
+│   ├── database-migration/SKILL.md    # Supabase schema migration & type sync runbook
+│   └── verify-and-deploy/SKILL.md     # Quality gate verification & release runbook
+│
+├── technologies/                      # FRAMEWORK & LIBRARY GUIDELINES
+│   ├── nextjs.md                      # Next.js 16 (App Router, RSC, Caching, Hydration)
+│   ├── vite-react.md                  # Vite SPA (import.meta.env, Routing, Tree-shaking)
+│   ├── supabase.md                    # Supabase (@supabase/ssr, Auth, RLS, Migrations)
+│   └── ai.md                          # Vercel AI SDK (streamText, useChat, Safety)
+│
+└── checklists/                        # VERIFICATION CHECKLISTS
+    ├── new-app.md                     # Checklist for onboarding new apps
+    ├── new-package.md                 # Checklist for onboarding new packages
+    ├── new-feature.md                 # Checklist for feature completion
+    ├── database-change.md             # Checklist for DB migrations
+    ├── api-change.md                  # Checklist for API endpoint changes
+    ├── security-review.md             # Checklist for RLS & security audit
+    └── production-release.md          # Pre-release checklist
 ```
 
 ---
 
-## 3. Domain Rules Reference
+## 2. Core Non-Negotiable Directives
 
-Refer to the specific rules in `.agents/rules/` when editing files in corresponding domains:
-
-- **01 Monorepo Core**: [.agents/rules/01-monorepo-core.md](file:///.agents/rules/01-monorepo-core.md)
-- **02 Code Quality & Minimalism**: [.agents/rules/02-code-quality.md](file:///.agents/rules/02-code-quality.md)
-- **03 UI Design System**: [.agents/rules/03-ui-design-system.md](file:///.agents/rules/03-ui-design-system.md)
-- **04 Framework Edge Cases**: [.agents/rules/04-framework-edge-cases.md](file:///.agents/rules/04-framework-edge-cases.md)
-- **05 Auth & Type-Safe Env**: [.agents/rules/05-auth-and-env.md](file:///.agents/rules/05-auth-and-env.md)
-- **06 Database & API Standards**: [.agents/rules/06-database-and-api.md](file:///.agents/rules/06-database-and-api.md)
-
----
-
-## 4. Skills Reference
-
-When executing multi-step operations, trigger the appropriate skill:
-
-- **Scaffold New App**: `view_file` [.agents/skills/scaffold-app/SKILL.md](file:///.agents/skills/scaffold-app/SKILL.md)
-- **Create Shared Package**: `view_file` [.agents/skills/create-package/SKILL.md](file:///.agents/skills/create-package/SKILL.md)
-- **Create UI Component**: `view_file` [.agents/skills/create-ui-component/SKILL.md](file:///.agents/skills/create-ui-component/SKILL.md)
-- **Database Migration**: `view_file` [.agents/skills/db-migration/SKILL.md](file:///.agents/skills/db-migration/SKILL.md)
-- **Debug Issue**: `view_file` [.agents/skills/debug-issue/SKILL.md](file:///.agents/skills/debug-issue/SKILL.md)
-- **Verify & Deploy**: `view_file` [.agents/skills/verify-and-deploy/SKILL.md](file:///.agents/skills/verify-and-deploy/SKILL.md)
+1. **Package Manager Lock**: Use `pnpm` exclusively. Never run `npm` or `yarn`. Use `pnpm workspace:*` for internal package dependencies.
+2. **Never Duplicate Code Across Apps**: UI components belong in `packages/ui`, types in `packages/types`, environment schemas in `packages/env`, auth logic in `packages/auth`, AI SDK logic in `packages/ai`, and helpers in `packages/utils`.
+3. **Empirical Verification Gate**: Run `pnpm turbo run build lint check-types` before marking any task resolved.
+4. **Zero Ad-hoc Hacks**: Always use theme tokens from `@repo/tailwind-config` / `packages/ui`. Do not hardcode magic numbers, hex colors, or raw `process.env`.

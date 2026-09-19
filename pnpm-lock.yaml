@@ -124,7 +124,7 @@ importers:
         specifier: ^5.7.3
         version: 5.9.3
 
-  apps/admin:
+  apps/marketting:
     dependencies:
       astro:
         specifier: ^7.3.2
