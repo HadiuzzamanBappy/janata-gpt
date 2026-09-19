@@ -1,5 +1,5 @@
 ---
-name: scaffold-new-app
+name: scaffold-app
 description: Runbook to scaffold and integrate a new application (Next.js, Astro, or Vite React) into the Turborepo monorepo with full package wiring.
 ---
 

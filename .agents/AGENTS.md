@@ -25,7 +25,7 @@ Welcome to the **Turbo Monorepo** project. As an AI coding agent operating in th
 turbo-monorepo-template/
 ├── .agents/                    # Agent instructions, rules & skills
 │   ├── AGENTS.md              # Master workspace guide (this file)
-│   ├── rules/                 # Always-on domain & framework rules
+│   ├── rules/                 # Always-on domain & framework rules (01-06)
 │   └── skills/                # Task-specific step-by-step runbooks
 ├── apps/
 │   ├── web/                   # Next.js 16 (App Router, RSC, Supabase, AI SDK)
@@ -49,15 +49,12 @@ turbo-monorepo-template/
 
 Refer to the specific rules in `.agents/rules/` when editing files in corresponding domains:
 
-- **Monorepo Architecture**: [.agents/rules/monorepo-architecture.md](file:///.agents/rules/monorepo-architecture.md)
-- **UI Consistency & Design System**: [.agents/rules/ui-consistency.md](file:///.agents/rules/ui-consistency.md)
-- **Code Quality & Minimalism**: [.agents/rules/code-quality-and-minimalism.md](file:///.agents/rules/code-quality-and-minimalism.md)
-- **SSR / RSC & Hydration Guards**: [.agents/rules/edge-cases-hydration-ssr.md](file:///.agents/rules/edge-cases-hydration-ssr.md)
-- **Astro Islands Gotchas**: [.agents/rules/edge-cases-astro-islands.md](file:///.agents/rules/edge-cases-astro-islands.md)
-- **Vite SPA & Bundling**: [.agents/rules/edge-cases-vite-spa.md](file:///.agents/rules/edge-cases-vite-spa.md)
-- **Auth & Type-safe Env**: [.agents/rules/auth-and-env-safety.md](file:///.agents/rules/auth-and-env-safety.md)
-- **AI SDK & Streaming**: [.agents/rules/ai-sdk-integration.md](file:///.agents/rules/ai-sdk-integration.md)
-- **Deployment & CI**: [.agents/rules/deployment-and-ci.md](file:///.agents/rules/deployment-and-ci.md)
+- **01 Monorepo Core**: [.agents/rules/01-monorepo-core.md](file:///.agents/rules/01-monorepo-core.md)
+- **02 Code Quality & Minimalism**: [.agents/rules/02-code-quality.md](file:///.agents/rules/02-code-quality.md)
+- **03 UI Design System**: [.agents/rules/03-ui-design-system.md](file:///.agents/rules/03-ui-design-system.md)
+- **04 Framework Edge Cases**: [.agents/rules/04-framework-edge-cases.md](file:///.agents/rules/04-framework-edge-cases.md)
+- **05 Auth & Type-Safe Env**: [.agents/rules/05-auth-and-env.md](file:///.agents/rules/05-auth-and-env.md)
+- **06 Database & API Standards**: [.agents/rules/06-database-and-api.md](file:///.agents/rules/06-database-and-api.md)
 
 ---
 
@@ -65,9 +62,9 @@ Refer to the specific rules in `.agents/rules/` when editing files in correspond
 
 When executing multi-step operations, trigger the appropriate skill:
 
-- **Create UI Component**: `view_file` [.agents/skills/create-ui-component/SKILL.md](file:///.agents/skills/create-ui-component/SKILL.md)
-- **Scaffold New App**: `view_file` [.agents/skills/scaffold-new-app/SKILL.md](file:///.agents/skills/scaffold-new-app/SKILL.md)
+- **Scaffold New App**: `view_file` [.agents/skills/scaffold-app/SKILL.md](file:///.agents/skills/scaffold-app/SKILL.md)
 - **Create Shared Package**: `view_file` [.agents/skills/create-package/SKILL.md](file:///.agents/skills/create-package/SKILL.md)
+- **Create UI Component**: `view_file` [.agents/skills/create-ui-component/SKILL.md](file:///.agents/skills/create-ui-component/SKILL.md)
 - **Database Migration**: `view_file` [.agents/skills/db-migration/SKILL.md](file:///.agents/skills/db-migration/SKILL.md)
 - **Debug Issue**: `view_file` [.agents/skills/debug-issue/SKILL.md](file:///.agents/skills/debug-issue/SKILL.md)
 - **Verify & Deploy**: `view_file` [.agents/skills/verify-and-deploy/SKILL.md](file:///.agents/skills/verify-and-deploy/SKILL.md)
