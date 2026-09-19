@@ -1,5 +1,22 @@
 import { describe, it, expect } from 'vitest';
-import { cn, capitalize, truncate, generateInitials, formatDate, formatTime, formatRelativeTime } from '../src/index';
+import {
+  cn,
+  capitalize,
+  truncate,
+  generateInitials,
+  slugify,
+  formatDate,
+  formatTime,
+  formatRelativeTime,
+  formatCurrency,
+  formatNumber,
+  formatBytes,
+  delay,
+  generateId,
+  groupBy,
+  chunk,
+  sample,
+} from '../src/index';
 
 describe('@repo/utils Utility Functions', () => {
   describe('cn (Tailwind Class Merger)', () => {
@@ -34,6 +51,12 @@ describe('@repo/utils Utility Functions', () => {
       expect(generateInitials('John Mid Doe')).toBe('JD');
       expect(generateInitials('')).toBe('');
     });
+
+    it('should slugify strings for URL routes', () => {
+      expect(slugify('My Project Alpha #1!')).toBe('my-project-alpha-1');
+      expect(slugify('  Spaces and---Dashes  ')).toBe('spaces-and-dashes');
+      expect(slugify('')).toBe('');
+    });
   });
 
   describe('Date Utilities', () => {
@@ -56,6 +79,70 @@ describe('@repo/utils Utility Functions', () => {
       const tenSecsAgo = new Date(now.getTime() - 10 * 1000);
       const relativeStr = formatRelativeTime(tenSecsAgo);
       expect(typeof relativeStr).toBe('string');
+    });
+  });
+
+  describe('Number Utilities', () => {
+    it('should format currency values', () => {
+      expect(formatCurrency(29)).toContain('29.00');
+      expect(formatCurrency(0)).toContain('0.00');
+      expect(formatCurrency(NaN)).toBe('$0.00');
+    });
+
+    it('should format compact numbers', () => {
+      expect(formatNumber(15400)).toBe('15.4K');
+      expect(formatNumber(1200000)).toBe('1.2M');
+      expect(formatNumber(500)).toBe('500');
+    });
+
+    it('should format byte sizes', () => {
+      expect(formatBytes(0)).toBe('0 Bytes');
+      expect(formatBytes(1024)).toBe('1 KB');
+      expect(formatBytes(1572864)).toBe('1.5 MB');
+    });
+  });
+
+  describe('Async Utilities', () => {
+    it('should pause execution with delay', async () => {
+      const start = Date.now();
+      await delay(50);
+      const elapsed = Date.now() - start;
+      expect(elapsed).toBeGreaterThanOrEqual(45);
+    });
+
+    it('should generate unique entity IDs', () => {
+      const id1 = generateId('chat');
+      const id2 = generateId('chat');
+      expect(id1).toContain('chat_');
+      expect(id1).not.toBe(id2);
+    });
+  });
+
+  describe('Array Utilities', () => {
+    it('should group items by key', () => {
+      const items = [
+        { category: 'fruit', name: 'apple' },
+        { category: 'fruit', name: 'banana' },
+        { category: 'veggie', name: 'carrot' },
+      ];
+      const grouped = groupBy(items, (item) => item.category);
+      expect(grouped.fruit).toHaveLength(2);
+      expect(grouped.veggie).toHaveLength(1);
+    });
+
+    it('should chunk array into sub-arrays', () => {
+      const list = [1, 2, 3, 4, 5];
+      const chunked = chunk(list, 2);
+      expect(chunked).toHaveLength(3);
+      expect(chunked[0]).toEqual([1, 2]);
+      expect(chunked[2]).toEqual([5]);
+    });
+
+    it('should return random sample items from array', () => {
+      const list = ['A', 'B', 'C', 'D'];
+      const sampled = sample(list, 2);
+      expect(sampled).toHaveLength(2);
+      expect(list).toContain(sampled[0]);
     });
   });
 });

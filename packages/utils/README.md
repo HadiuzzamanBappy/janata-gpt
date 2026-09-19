@@ -1,26 +1,17 @@
 # `@repo/utils`
 
-Shared utility functions for class merging, date formatting, and string manipulation across the monorepo.
+Shared utility library for class merging, date formatting, number/currency formatting, async helpers, array operations, and string manipulation across the monorepo.
 
-## Features
+## Modules Overview
 
-- **Class Merging (`cn`)**: Combines `clsx` and `tailwind-merge` for intelligent, conflict-free Tailwind CSS class merging.
-- **Date Formatting (`formatDate`, `formatTime`, `formatRelativeTime`)**: Zero-dependency date utilities powered by the native `Intl` browser API.
-- **String Helpers (`capitalize`, `truncate`, `generateInitials`)**: Pure TypeScript string manipulation methods.
-
----
-
-## Installation & Setup
-
-In any application or package `package.json`:
-
-```json
-{
-  "dependencies": {
-    "@repo/utils": "workspace:*"
-  }
-}
-```
+| Export | Source | Description |
+| :--- | :--- | :--- |
+| `cn(...inputs)` | [`src/cn.ts`](file:///d:/Work/React/turbo-monorepo-template/packages/utils/src/cn.ts) | Tailwind CSS class merging (`clsx` + `tailwind-merge`). |
+| `formatDate`, `formatTime`, `formatRelativeTime` | [`src/dates.ts`](file:///d:/Work/React/turbo-monorepo-template/packages/utils/src/dates.ts) | Zero-dependency date & relative time formatting using native `Intl`. |
+| `capitalize`, `truncate`, `generateInitials`, `slugify` | [`src/strings.ts`](file:///d:/Work/React/turbo-monorepo-template/packages/utils/src/strings.ts) | String formatting, initials generation, and URL slugification. |
+| `formatCurrency`, `formatNumber`, `formatBytes` | [`src/numbers.ts`](file:///d:/Work/React/turbo-monorepo-template/packages/utils/src/numbers.ts) | Currency formatting, compact number notation (`15.4K`), and byte sizing. |
+| `delay`, `generateId` | [`src/async.ts`](file:///d:/Work/React/turbo-monorepo-template/packages/utils/src/async.ts) | Async pause promises and client-side entity ID generation. |
+| `groupBy`, `chunk`, `sample` | [`src/array.ts`](file:///d:/Work/React/turbo-monorepo-template/packages/utils/src/array.ts) | Collection grouping, pagination chunking, and array sampling. |
 
 ---
 
@@ -31,35 +22,38 @@ In any application or package `package.json`:
 ```tsx
 import { cn } from '@repo/utils';
 
-// Solves Tailwind specificity conflicts (e.g. 'px-2' vs 'p-4')
 <button className={cn('px-2 py-1 bg-blue-500 text-white', isActive && 'bg-blue-700', 'p-4')}>
   Click Me
 </button>
 ```
 
-### 2. Date Utilities
+### 2. Number & Currency Formatting
 
 ```typescript
-import { formatDate, formatTime, formatRelativeTime } from '@repo/utils';
+import { formatCurrency, formatNumber, formatBytes } from '@repo/utils';
 
-// Standard Date Formatting ("Jan 15, 2026")
-const formattedDate = formatDate(new Date());
-
-// Time Formatting ("2:30 PM")
-const formattedTime = formatTime(new Date());
-
-// Relative Time ("5 minutes ago", "in 2 hours", "yesterday")
-const relativeStr = formatRelativeTime(new Date(Date.now() - 300000));
+formatCurrency(29.99);      // "$29.99"
+formatNumber(15400);        // "15.4K"
+formatBytes(1572864);       // "1.5 MB"
 ```
 
-### 3. String Utilities
+### 3. Async & ID Helpers
 
 ```typescript
-import { capitalize, truncate, generateInitials } from '@repo/utils';
+import { delay, generateId } from '@repo/utils';
 
-capitalize('hello world'); // "Hello world"
-truncate('Long text summary', 10); // "Long text..."
-generateInitials('Hadi Bappy'); // "HB"
+await delay(500);           // Pauses execution for 500ms
+const id = generateId('chat'); // "chat_m3k8a2b..."
+```
+
+### 4. Array & Grouping Operations
+
+```typescript
+import { groupBy, chunk, sample } from '@repo/utils';
+
+const grouped = groupBy(items, (item) => item.category);
+const pages = chunk(items, 10);
+const randomItems = sample(items, 3);
 ```
 
 ---

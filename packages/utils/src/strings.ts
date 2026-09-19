@@ -18,3 +18,13 @@ export function generateInitials(name: string): string {
   if (parts.length === 1) return parts[0]?.charAt(0).toUpperCase() || '';
   return `${parts[0]?.charAt(0)}${parts[parts.length - 1]?.charAt(0)}`.toUpperCase();
 }
+
+export function slugify(str: string): string {
+  if (!str) return '';
+  return str
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
