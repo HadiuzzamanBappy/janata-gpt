@@ -41,10 +41,7 @@ export function AppSidebar({ user, chatSessions = [], ...props }: AppSidebarProp
   const router = useRouter();
 
   const handleSignOut = async () => {
-    const supabase = createSupabaseBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    const supabase = createSupabaseBrowserClient();
     await supabase.auth.signOut();
     router.push('/login');
     router.refresh();
