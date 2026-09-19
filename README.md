@@ -1,159 +1,120 @@
-# Turborepo starter
+# JanataGPT 🚀
 
-This Turborepo starter is maintained by the Turborepo core team.
+**JanataGPT** is an enterprise-grade, multi-model AI platform built on a high-performance Turborepo monorepo architecture. It features a Next.js 16 web application, Astro 7 static marketing engine, real-time Supabase authentication & Postgres database, Vercel AI SDK streaming, and a shared CVA design system.
 
-## Using this example
+---
 
-Run the following command:
+## 🌟 Key Features
 
-```sh
-npx create-turbo@latest
+- 🤖 **Multi-Model LLM Streaming**: Native integration with Google Gemini, DeepSeek, OpenRouter, and ZAI via Vercel AI SDK.
+- ⚡ **Next.js 16 & React 19**: Full App Router, React Server Components (RSC), and Server Actions support.
+- 🚀 **Astro 7 SSG Marketing Engine**: Sub-second static page loads with interactive React 19 islands.
+- 🔒 **Supabase SSR Auth & RLS**: Cookie-based authentication and Row Level Security on Postgres.
+- 🎨 **Shared Design System (`@repo/ui`)**: Accessible Radix UI primitives styled with Tailwind CSS, CVA variants, and `cn()` utility.
+- 🛡️ **Type-Safe Environment (`@repo/env`)**: Centralized Zod schema validation ensuring missing env vars fail build time.
+- 🧠 **AI Agent Operating System (`.agents/`)**: Built-in governance, rules, workflows, technology guides, and verification checklists.
+
+---
+
+## 🏗️ Monorepo Topology
+
+```text
+JanataGPT/
+├── apps/
+│   ├── web/                   # Next.js 16 (App Router, RSC, Supabase, AI SDK) - Name: @apps/web
+│   └── marketting/            # Astro 7 (SSG / React Islands) - Name: @apps/marketting
+├── packages/
+│   ├── ai/                    # Vercel AI SDK wrappers & LLM providers (@repo/ai)
+│   ├── auth/                  # Supabase SSR authentication helpers (@repo/auth)
+│   ├── env/                   # Type-safe environment variable validation (@repo/env)
+│   ├── eslint-config/         # Shared ESLint configurations (@repo/eslint-config)
+│   ├── types/                 # Database interfaces & global DTOs (@repo/types)
+│   ├── typescript-config/     # Standardized tsconfig presets (@repo/typescript-config)
+│   ├── ui/                    # Design system components, Radix primitives (@repo/ui)
+│   └── utils/                 # General helper functions & formatters (@repo/utils)
+├── .agents/                   # AI Agent Operating System (Governance, Rules, Workflows)
+└── docs/                      # System documentation, ERDs, and API contracts
 ```
 
-## What's inside?
+---
 
-This Turborepo includes the following packages/apps:
+## 🚀 Quickstart
 
-### Apps and Packages
+### Prerequisites
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `@next/eslint-plugin-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- **Node.js**: `>= 22.12.0`
+- **Package Manager**: `pnpm` (v9 or v10)
+- **Supabase CLI**: Required for local database migrations
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### 1. Installation
 
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo build
+```bash
+git clone <repository-url>
+cd JanataGPT
+pnpm install
 ```
 
-Without global `turbo`, use your package manager:
+### 2. Environment Setup
 
-```sh
-cd my-turborepo
-npx turbo build
-npm exec turbo build
-npm exec turbo build
+Copy `.env.example` to `.env` and fill in your keys:
+
+```bash
+cp .env.example .env
 ```
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+### 3. Development Server
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
+Start all applications and package watchers concurrently:
 
-```sh
-turbo build --filter=docs
+```bash
+pnpm dev
 ```
 
-Without global `turbo`:
+- **Web App (`@apps/web`)**: [http://localhost:3000](http://localhost:3000)
+- **Marketing Site (`@apps/marketting`)**: [http://localhost:4321](http://localhost:4321)
 
-```sh
-npx turbo build --filter=docs
-npm exec turbo build --filter=docs
-npm exec turbo build --filter=docs
+---
+
+## 🛠️ CLI Scripts & Workflows
+
+### Monorepo Tasks
+
+| Script | Command | Purpose |
+| :--- | :--- | :--- |
+| **`pnpm dev`** | `turbo run dev` | Runs development servers for all apps. |
+| **`pnpm build`** | `turbo run build` | Production build across all apps and packages. |
+| **`pnpm check-types`** | `turbo run check-types` | Typecheck TypeScript across the monorepo. |
+| **`pnpm lint`** | `turbo run lint` | Run ESLint across all apps and packages. |
+| **`pnpm test`** | `turbo run test` | Run Vitest unit tests in `@repo/ui`. |
+
+### Database & Supabase Management
+
+| Script | Command | Purpose |
+| :--- | :--- | :--- |
+| **`pnpm db:start`** | `supabase start` | Start local Supabase Postgres instance. |
+| **`pnpm db:studio`** | `supabase start && studio` | Open local Supabase Studio UI (Port 54323). |
+| **`pnpm db:new`** | `supabase migration new` | Create a new SQL migration file. |
+| **`pnpm db:push`** | `supabase db push` | Push pending migrations to remote Supabase. |
+| **`pnpm db:types`** | `supabase gen types` | Generate TypeScript definitions to `@repo/types`. |
+
+### Model Testing Scripts
+
+```bash
+pnpm test:gemini      # Test local Google Gemini LLM API connection
+pnpm test:deepseek    # Test DeepSeek LLM connection
+pnpm test:openrouter  # Test OpenRouter LLM connection
+pnpm test:models      # List active provider models
 ```
 
-### Develop
+---
 
-To develop all apps and packages, run the following command:
+## 📚 System Documentation & AI Agent Rules
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
+- **Project Documentation**: Explore [`docs/`](file:///d:/Work/React/turbo-monorepo-template/docs/README.md) for Architecture Diagrams, Database ERDs, and API specs.
+- **AI Agent OS**: Explore [`.agents/`](file:///d:/Work/React/turbo-monorepo-template/.agents/AGENTS.md) for Monorepo Governance, 10 Domain Rules, and 7 Workflow Runbooks.
 
-```sh
-cd my-turborepo
-turbo dev
-```
+---
 
-Without global `turbo`, use your package manager:
+## 📄 License
 
-```sh
-cd my-turborepo
-npx turbo dev
-npm exec turbo dev
-npm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo dev --filter=web
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo dev --filter=web
-npm exec turbo dev --filter=web
-npm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-npm exec turbo login
-npm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-npm exec turbo link
-npm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+Private & Proprietary - All rights reserved.
