@@ -10,10 +10,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./*"
+        "./src/*"
       ],
       "@/components/*": [
-        "./components/*"
+        "./src/components/*"
       ],
       "@/components/ui/*": [
         "../../packages/ui/src/components/ui/*"
@@ -22,10 +22,10 @@
         "../../packages/ui/src/hooks/*"
       ],
       "@/lib/plugins": [
-        "./lib/plugins"
+        "./src/lib/plugins"
       ],
       "@/lib/chats": [
-        "./lib/chats"
+        "./src/lib/chats"
       ],
       "@/lib/*": [
         "../../packages/ui/src/lib/*"

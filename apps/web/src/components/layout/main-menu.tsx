@@ -66,6 +66,7 @@ export function MainMenu({ isAuth, onLoginClick, onSearchClick }: { isAuth?: boo
                   <SidebarMenuButton 
                     tooltip={item.title} 
                     render={<DropdownMenuTrigger />}
+                    className="font-medium"
                   >
                     <item.icon />
                     <span>{item.title}</span>
@@ -98,6 +99,7 @@ export function MainMenu({ isAuth, onLoginClick, onSearchClick }: { isAuth?: boo
                 <SidebarMenuButton
                   tooltip={item.title}
                   onClick={onSearchClick}
+                  className="font-medium"
                 >
                   <item.icon />
                   <span>{item.title}</span>

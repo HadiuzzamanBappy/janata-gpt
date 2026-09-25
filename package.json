@@ -1,6 +1,7 @@
 {
   "name": "JanataGPT",
   "private": true,
+  "packageManager": "pnpm@10.6.1",
   "version": "0.0.0",
   "scripts": {
     "build": "turbo run build",
@@ -45,14 +46,5 @@
     "tsx": "^4.23.13",
     "turbo": "^2.10.13",
     "typescript": "^5.7.3"
-  },
-  "engines": {
-    "node": ">=24"
-  },
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "10.6.1"
-    }
   }
 }
